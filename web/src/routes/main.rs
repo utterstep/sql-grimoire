@@ -19,8 +19,13 @@ use crate::{
 /// Main page of the web interface
 pub async fn main_page(
     State(state): State<WebAppState>,
-    user: UserClaims,
+    user: Option<UserClaims>,
 ) -> Result<impl IntoResponse> {
+    let user = match user {
+        Some(user) => user,
+        None => return Ok(Redirect::to("/auth/login/").into_response()),
+    };
+
     let mut txn = state
         .db()
         .begin()
@@ -29,7 +34,7 @@ pub async fn main_page(
 
     let user = match user::get_user(&mut txn, &user).await? {
         Some(user) => user,
-        None => return Ok(Redirect::to("/login").into_response()),
+        None => return Ok(Redirect::to("/auth/login/").into_response()),
     };
 
     let exercises = exercise::get_exercise_list(&mut txn, user.id()).await?;
