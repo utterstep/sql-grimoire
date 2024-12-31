@@ -1,0 +1,28 @@
+[workspace.package]
+version = "0.1.0"
+authors = [
+    "Vlad Stepanov <utterstep@hey.com>",
+]
+edition = "2021"
+
+[workspace]
+resolver = "2"
+members = [
+    "id",
+    "observability",
+    "web",
+]
+
+[workspace.dependencies]
+derive-getters = "0.5.0"
+displaydoc = "0.2.5"
+eyre = "0.6.12"
+secrecy = { version = "0.10.3", features = ["serde"] }
+serde = { version = "1.0.217", features = ["derive"] }
+thiserror = "2.0.9"
+tracing = "0.1.41"
+uuid = { version = "1.11.0", features = ["serde", "v7"] }
+url = { version = "2.5.4", features = ["serde"] }
+
+[patch.crates-io]
+axum-jwt-auth = { path = "/Users/utterstep/my/junk/axum-jwt-auth" }

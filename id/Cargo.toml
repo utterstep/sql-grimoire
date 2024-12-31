@@ -1,0 +1,11 @@
+[package]
+name = "sql-grimoire-id"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+serde.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+serde_test = "1.0.177"
