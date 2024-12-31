@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, name, schema_id, question, expected_query, expected_result\n        FROM exercise\n        WHERE id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "schema_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 3,
+        "name": "question",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "expected_query",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "expected_result",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "36bd87fee5867135fe737282dce25d142b24a7d800f6c442abc7a5dcbc0df118"
+}

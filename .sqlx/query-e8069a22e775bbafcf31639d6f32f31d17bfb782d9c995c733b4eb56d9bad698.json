@@ -1,0 +1,56 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO exercise\n                (schema_id, name, question, expected_query, expected_result)\n            VALUES\n                ($1, $2, $3, $4, $5)\n            RETURNING\n                id, schema_id, name, question, expected_query, expected_result",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "schema_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "question",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "expected_query",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "expected_result",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Text",
+        "Jsonb"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "e8069a22e775bbafcf31639d6f32f31d17bfb782d9c995c733b4eb56d9bad698"
+}

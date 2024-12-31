@@ -1,0 +1,56 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE exercise\n            SET\n                name = $1,\n                question = $2,\n                expected_query = $3,\n                expected_result = $4\n            WHERE\n                id = $5\n            RETURNING\n                id, schema_id, name, question, expected_query, expected_result",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "schema_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "question",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "expected_query",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "expected_result",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text",
+        "Jsonb",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "b3902e5f78953f93496f80ad495577e97b2f384e98116ba5225dfd9cbedd527d"
+}
