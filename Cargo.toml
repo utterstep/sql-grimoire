@@ -25,4 +25,4 @@ uuid = { version = "1.11.0", features = ["serde", "v7"] }
 url = { version = "2.5.4", features = ["serde"] }
 
 [patch.crates-io]
-axum-jwt-auth = { path = "/Users/utterstep/my/junk/axum-jwt-auth" }
+axum-jwt-auth = { git = "https://github.com/utterstep/axum-jwt-auth.git", branch = "axum-0.7" }
