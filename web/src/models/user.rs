@@ -69,6 +69,18 @@ pub struct UserClaims {
     email: String,
 }
 
+impl UserClaims {
+    pub fn new(id: &str, email: &str, iss: &str) -> Self {
+        Self {
+            iss: iss.to_string(),
+            sub: id.to_string(),
+            exp: time::OffsetDateTime::now_utc() + time::Duration::days(1),
+            nbf: time::OffsetDateTime::now_utc(),
+            email: email.to_string(),
+        }
+    }
+}
+
 fn deserialize_datetime_from_timestamp<'de, D>(
     deserializer: D,
 ) -> Result<time::OffsetDateTime, D::Error>
