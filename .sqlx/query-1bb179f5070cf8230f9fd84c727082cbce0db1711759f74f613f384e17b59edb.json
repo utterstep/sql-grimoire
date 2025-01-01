@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n            exercise.id,\n            exercise.name,\n            'correct' = ANY(user_solution.status) AS solved\n        FROM exercise\n        LEFT OUTER JOIN (\n            SELECT\n                exercise_id,\n                ARRAY_AGG(status) AS status\n            FROM user_solution\n            WHERE\n                user_id = $1\n            GROUP BY exercise_id\n        ) AS user_solution ON exercise.id = user_solution.exercise_id\n        ORDER BY exercise.name\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "solved",
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "1bb179f5070cf8230f9fd84c727082cbce0db1711759f74f613f384e17b59edb"
+}
