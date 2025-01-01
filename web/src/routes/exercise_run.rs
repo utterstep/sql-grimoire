@@ -67,7 +67,7 @@ pub async fn run(
                     }
                 }
             }
-            div
+            turbo-frame
                 #sql-run
                 data-controller="sql-run solution-submit highlight"
                 data-sql-run-monaco-outlet="#editor"
@@ -83,7 +83,7 @@ pub async fn run(
                                 class="table-info"
                             {
                                 details class="table-info__details" {
-                                    summary {
+                                    summary class="table-info__summary" {
                                         h3 class="table-info__title" { "Table Structure" }
                                     }
                                     pre class="table-info__schema" {

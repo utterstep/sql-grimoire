@@ -4,7 +4,7 @@ class SimpleEditorController extends Controller {
     static targets = ['editor'];
 
     connect() {
-        console.log('SimpleEditorController connected');
+
     }
 
     getValue() {

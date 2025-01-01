@@ -7,6 +7,7 @@ fn main() {
     process_file("static/js/corbado-login.js", "corbado_login_HASH");
     process_file("static/js/lucide.js", "lucide_HASH");
     process_file("static/js/monaco-init.js", "monaco_init_HASH");
+    process_file("static/js/monaco-loader.js", "monaco_loader_HASH");
     process_file("static/js/stimulus-init.js", "stimulus_init_HASH");
 
     // controllers

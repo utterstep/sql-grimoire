@@ -91,27 +91,29 @@ impl FromRequestParts<WebAppState> for UserClaims {
     ) -> Result<Self, Self::Rejection> {
         // FIXME: Remove this once Corbado is functional again...
 
-        let cookie_jar = CookieJar::from_request_parts(parts, state).await.unwrap();
-        let is_admin = cookie_jar
-            .get("is_admin")
-            .map(|c| c.value() == "true")
-            .unwrap_or(false);
+        let claims = if state.config().observability().environment() == "scyther" {
+            let cookie_jar = CookieJar::from_request_parts(parts, state).await.unwrap();
+            let is_admin = cookie_jar
+                .get("is_admin")
+                .map(|c| c.value() == "true")
+                .unwrap_or(false);
 
-        let user_id = if is_admin {
-            "usr-8269099262267312113"
+            let user_id = if is_admin {
+                "usr-8269099262267312113"
+            } else {
+                "usr-3887086356872588729"
+            };
+
+            UserClaims::new(user_id, "test@test.com", state.config().corbado_host())
         } else {
-            "usr-3887086356872588729"
+            let session_token = SessionToken::from_request_parts(parts, state).await?;
+
+            state
+                .jwks_decoder()
+                .decode(&session_token.0)
+                .map_err(AuthExtractorError::JWTValidationError)
+                .map(|token_data| token_data.claims)?
         };
-
-        let claims = UserClaims::new(user_id, "test@test.com", state.config().corbado_host());
-
-        // let session_token = SessionToken::from_request_parts(parts, state).await?;
-
-        // let claims: UserClaims = state
-        //     .jwks_decoder()
-        //     .decode(&session_token.0)
-        //     .map_err(AuthExtractorError::JWTValidationError)
-        //     .map(|token_data| token_data.claims)?;
 
         let now = time::OffsetDateTime::now_utc();
 

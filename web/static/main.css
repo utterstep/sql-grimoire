@@ -31,12 +31,22 @@ html {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+
+    color: inherit;
+    text-decoration: none;
+}
+
+.nav__brand:hover {
+    color: #c084fc;
 }
 
 .nav__icon {
     width: 1.5rem;
     height: 1.5rem;
     color: #c084fc;
+
+    position: relative;
+    top: 0.1rem;
 }
 
 .nav__title {
@@ -114,7 +124,6 @@ html {
 
 .table-info {
     background-color: #0f172a;
-    padding: 1rem;
     border-radius: 0.5rem;
 }
 
@@ -123,10 +132,20 @@ html {
     color: #94a3b8;
 }
 
+.table-info__summary {
+    cursor: pointer;
+
+    padding: 1rem;
+    user-select: none;
+}
+
+.table-info__summary:hover {
+    color: #f1f5f9;
+}
+
 .table-info__title {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #94a3b8;
     margin-bottom: 0.5rem;
 
     display: inline;
@@ -136,6 +155,8 @@ html {
     font-size: 0.875rem;
     color: #cbd5e1;
     overflow-x: auto;
+
+    margin: 0;
 }
 
 .editor__header {

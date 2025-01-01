@@ -1,8 +1,8 @@
-window.CORBADO_LOADED = false;
+if (!window.CORBADO_LOADED) {
+    await Corbado.load({
+        darkMode: 'on',
+        projectId: 'pro-1480739848524663487',
+    });
 
-await Corbado.load({
-    darkMode: 'on',
-    projectId: 'pro-1480739848524663487',
-});
-
-window.CORBADO_LOADED = true;
+    window.CORBADO_LOADED = true;
+}

@@ -6,13 +6,30 @@ class SqlRunController extends Controller {
     static outlets = ['simple-editor', 'monaco'];
 
     async connect() {
+        const schemaCreationQueries = this.schemaTarget.textContent;
+
+        if (schemaCreationQueries) {
+            await this.resetDb(schemaCreationQueries);
+        }
+    }
+
+    async schemaUpdated({ detail: { schema: { schema } } }) {
+        console.log('schemaUpdated', schema);
+
+        await this.resetDb(schema);
+    }
+
+    async resetDb(schema) {
         this.db = await PGlite.create();
 
-        const schemaCreationQueries = this.schemaTarget.textContent;
-        await this.db.exec(schemaCreationQueries);
+        await this.db.exec(schema);
     }
 
     async runQuery(query) {
+        if (!this.db) {
+            throw new Error('Database not initialized');
+        }
+
         const result = await this.db.query(query, [], { rowMode: 'array' });
 
         return result;
@@ -28,7 +45,9 @@ class SqlRunController extends Controller {
         }
     }
 
-    async execute() {
+    async execute(e) {
+        e.preventDefault();
+
         const query = this.getQuery();
 
         const result = await this.runQuery(query);
@@ -64,7 +83,9 @@ class SqlRunController extends Controller {
         this.resultsTarget.scrollIntoView({ behavior: 'smooth' });
     }
 
-    async executeToTextArea() {
+    async executeToTextArea(e) {
+        e.preventDefault();
+
         const query = this.getQuery();
         const result = await this.runQuery(query);
 

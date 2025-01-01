@@ -31,6 +31,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
     html! {
         form
             data-controller="sql-run schema-hidden"
+            data-action="schema-hidden:schema-updated->sql-run#schemaUpdated"
             data-sql-run-simple-editor-outlet="#editor"
             class="form"
             method="post"

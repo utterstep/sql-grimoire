@@ -1,6 +1,6 @@
 use maud::{html, Markup, DOCTYPE};
 
-use crate::static_files::{corbado_init, lucide, main_css, stimulus_init};
+use crate::static_files;
 
 /// Page template, ~100% of the time you want to use this.
 pub fn page(page_title: impl AsRef<str>, content: Markup) -> Markup {
@@ -11,9 +11,7 @@ pub fn page(page_title: impl AsRef<str>, content: Markup) -> Markup {
             (footer())
         }
         // Icons
-        script type="module" src={"/static/" (lucide.name)} {}
-        // Monaco loader
-        script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.min.js" {}
+        script type="module" src={"/static/" (static_files::lucide.name)} {}
     }
 }
 
@@ -33,7 +31,7 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
         head {
             meta charset="utf-8";
             title { (page_title) }
-            link rel="stylesheet" href={"/static/" (main_css.name)};
+            link rel="stylesheet" href={"/static/" (static_files::main_css.name)};
 
             // Turbo
             script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.11/+esm" {}
@@ -45,13 +43,16 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
                 crossorigin="anonymous"
                 referrerpolicy="no-referrer";
             script src="https://unpkg.com/@corbado/web-js@2/dist/bundle/index.js" {}
-            script type="module" src={"/static/" (corbado_init.name)} {}
+            script type="module" src={"/static/" (static_files::corbado_init.name)} {}
 
             // Stimulus
-            script type="module" src={"/static/" (stimulus_init.name)} {}
+            script type="module" src={"/static/" (static_files::stimulus_init.name)} {}
 
             // Highlight.js
             link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/vs2015.min.css" {}
+
+            // Monaco loader
+            script type="module" src={"/static/" (static_files::monaco_loader.name)} {}
 
             (head_content)
         }
@@ -64,7 +65,7 @@ pub fn app_layout(content: Markup, title: &str) -> Markup {
         div class="app" {
             nav class="nav" {
                 div class="nav__container" {
-                    div class="nav__brand" {
+                    a href="/" class="nav__brand" {
                         i data-lucide="book-open" class="nav__icon" {}
                         span class="nav__title" { (title) }
                     }

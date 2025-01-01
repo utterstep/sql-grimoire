@@ -19,6 +19,11 @@ static_files!(
         mime::TEXT_JAVASCRIPT
     ),
     (
+        monaco_loader,
+        "../static/js/monaco-loader.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    (
         stimulus_init,
         "../static/js/stimulus-init.js",
         mime::TEXT_JAVASCRIPT
