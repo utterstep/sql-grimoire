@@ -106,7 +106,7 @@ pub async fn get_exercise_list(
                 user_id = $1
             GROUP BY exercise_id
         ) AS user_solution ON exercise.id = user_solution.exercise_id
-        ORDER BY exercise.id
+        ORDER BY exercise.name
         ",
         user_id,
     )
