@@ -284,7 +284,7 @@ dependencies = [
 [[package]]
 name = "axum-jwt-auth"
 version = "0.1.1"
-source = "git+https://github.com/utterstep/axum-jwt-auth.git?branch=axum-0.7#bfa0b6db4c6e80650068cd2cca6d4f2456759645"
+source = "git+https://github.com/cmackenzie1/axum-jwt-auth.git#47cac6f6a2f7df6f36041eabdfe621b6333435c6"
 dependencies = [
  "axum",
  "axum-extra",

@@ -24,5 +24,6 @@ tracing = "0.1.41"
 uuid = { version = "1.11.0", features = ["serde", "v7"] }
 url = { version = "2.5.4", features = ["serde"] }
 
-[patch.crates-io]
-axum-jwt-auth = { git = "https://github.com/utterstep/axum-jwt-auth.git", branch = "axum-0.7" }
+[patch.crates-io.axum-jwt-auth]
+git = "https://github.com/cmackenzie1/axum-jwt-auth.git"
+commit = "47cac6f6a2f7df6f36041eabdfe621b6333435c6"
