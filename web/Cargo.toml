@@ -36,6 +36,7 @@ lazy_static = "1.5.0"
 time = { version = "0.3.37", features = ["serde"] }
 axum-extra = { version = "0.9.6", features = ["cookie"] }
 jsonwebtoken = "9.3.0"
+pulldown-cmark = "0.12.2"
 
 [build-dependencies]
 static_file_util = "0.1.0"

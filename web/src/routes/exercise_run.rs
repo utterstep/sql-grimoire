@@ -5,7 +5,7 @@ use axum::{
     response::IntoResponse,
 };
 use eyre::{OptionExt, WrapErr};
-use maud::html;
+use maud::{html, PreEscaped};
 use serde::Deserialize;
 
 use crate::{
@@ -57,6 +57,10 @@ pub async fn run(
 
     let title = format!("SQL Grimoire - {}", exercise.name());
 
+    let question_parsed = pulldown_cmark::Parser::new(exercise.question());
+    let mut question_html = String::new();
+    pulldown_cmark::html::push_html(&mut question_html, question_parsed);
+
     let inner = app_layout(
         html! {
             div class="content__header" {
@@ -78,7 +82,7 @@ pub async fn run(
                     div class="panel panel--exercise" {
                         h2 class="panel__title" { (exercise.name()) }
                         div class="panel__content" {
-                            p class="panel__text" { (exercise.question()) }
+                            p class="panel__text" { (PreEscaped(question_html)) }
                             div
                                 class="table-info"
                             {

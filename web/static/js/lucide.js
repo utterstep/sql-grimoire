@@ -1,26 +1,28 @@
 import {
     createIcons,
+    AlertCircle,
     BookOpen,
+    Check,
     CheckCircle2,
-    Plus,
-    Edit,
-    Trash2,
     ChevronLeft,
     Database,
-    Check,
+    Edit,
+    Plus,
     Send,
+    Trash2,
 } from 'https://esm.sh/lucide@0.469.0';
 
 const icons = {
+    AlertCircle,
     BookOpen,
+    Check,
     CheckCircle2,
-    Plus,
-    Edit,
-    Trash2,
     ChevronLeft,
     Database,
-    Check,
+    Edit,
+    Plus,
     Send,
+    Trash2,
 };
 
 document.documentElement.addEventListener('turbo:render', () => {
