@@ -6,6 +6,7 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::extract::cookie::{self, Cookie, CookieJar};
+use time::Duration;
 
 use crate::{models::user::User, state::AppState};
 
@@ -60,6 +61,8 @@ pub async fn add_corbado_project_id(
     let cookies = {
         let mut cookie = Cookie::new(CORBADO_PROJECT_ID_COOKIE, project_id.to_string());
         cookie.set_same_site(cookie::SameSite::Lax);
+        cookie.set_path("/");
+        cookie.set_max_age(Duration::days(365));
 
         cookies.add(cookie)
     };
