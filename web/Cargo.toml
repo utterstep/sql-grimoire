@@ -11,7 +11,7 @@ sql-grimoire-observability = { path = "../observability" }
 apply = "0.3.0"
 axum = { version = "0.7.9", features = ["macros"] }
 axum_csrf = { version = "0.10.2", features = ["layer"] }
-axum-jwt-auth = { version = "0.1.1" }
+axum-jwt-auth = "0.2.0"
 displaydoc.workspace = true
 derive-getters.workspace = true
 envy = "0.4.2"
