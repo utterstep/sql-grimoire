@@ -47,6 +47,8 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
     let csp = ContentSecurityPolicy::new()
         .connect_src(vec![
             "'self'",
+            // FIXME: dynamically set this to the app host
+            "*.utterstep.app",
             "*.frontendapi.corbado.io",
             "cdn.jsdelivr.net",
         ])
