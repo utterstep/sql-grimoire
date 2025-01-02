@@ -14,7 +14,7 @@ use tracing::{error, trace};
 use crate::{
     db::user,
     models::user::{User, UserClaims},
-    state::WebAppState,
+    state::AppState,
 };
 
 #[derive(Debug, Error, Display)]
@@ -54,12 +54,12 @@ const SESSION_COOKIE: &str = "cbo_session_token";
 struct SessionToken(String);
 
 #[async_trait]
-impl FromRequestParts<WebAppState> for SessionToken {
+impl FromRequestParts<AppState> for SessionToken {
     type Rejection = AuthExtractorError;
 
     async fn from_request_parts(
         parts: &mut Parts,
-        state: &WebAppState,
+        state: &AppState,
     ) -> Result<Self, Self::Rejection> {
         let jar = CookieJar::from_request_parts(parts, state)
             .await
@@ -81,13 +81,13 @@ impl FromRequestParts<WebAppState> for SessionToken {
 }
 
 #[async_trait]
-impl FromRequestParts<WebAppState> for UserClaims {
+impl FromRequestParts<AppState> for UserClaims {
     type Rejection = AuthExtractorError;
 
     #[tracing::instrument(skip(parts, state))]
     async fn from_request_parts(
         parts: &mut Parts,
-        state: &WebAppState,
+        state: &AppState,
     ) -> Result<Self, Self::Rejection> {
         let session_token = SessionToken::from_request_parts(parts, state).await?;
 
@@ -118,12 +118,12 @@ impl FromRequestParts<WebAppState> for UserClaims {
 }
 
 #[async_trait]
-impl FromRequestParts<WebAppState> for User {
+impl FromRequestParts<AppState> for User {
     type Rejection = AuthExtractorError;
 
     async fn from_request_parts(
         parts: &mut Parts,
-        state: &WebAppState,
+        state: &AppState,
     ) -> Result<Self, Self::Rejection> {
         let claims = UserClaims::from_request_parts(parts, state).await?;
         let mut conn = state.db().acquire().await?;

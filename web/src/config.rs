@@ -13,6 +13,7 @@ pub struct ConfigInner {
     database_url: SecretString,
     bind_to: String,
     corbado_host: String,
+    corbado_project_id: String,
     secret_key: SecretString,
 }
 

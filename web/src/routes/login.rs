@@ -8,7 +8,7 @@ use maud::{html, Markup};
 use tracing::debug;
 
 use crate::{
-    db::user, error::Result, models::user::UserClaims, partials::page, state::WebAppState,
+    db::user, error::Result, models::user::UserClaims, partials::page, state::AppState,
     static_files::corbado_login,
 };
 
@@ -28,7 +28,7 @@ pub async fn login() -> Markup {
 #[debug_handler]
 #[tracing::instrument(skip_all, fields(sub = %claims.sub()))]
 pub async fn after_login(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     claims: UserClaims,
 ) -> Result<impl IntoResponse> {
     let mut txn = state

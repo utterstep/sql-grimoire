@@ -13,7 +13,7 @@ use crate::{
     error::Result,
     models::{exercise::ExerciseId, user::UserClaims},
     partials::{app_layout, page},
-    state::WebAppState,
+    state::AppState,
     static_files::{
         highlight_controller, monaco_controller, monaco_init, solution_submit_controller,
         sql_run_controller,
@@ -23,7 +23,7 @@ use crate::{
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 pub async fn run(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     Path(exercise_id): Path<ExerciseId>,
     user: UserClaims,
 ) -> Result<impl IntoResponse> {
@@ -208,7 +208,7 @@ pub struct ExerciseCheckResultRequest {
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 pub async fn submit_solution(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     Path(exercise_id): Path<ExerciseId>,
     user: UserClaims,
     Json(results): Json<ExerciseCheckResultRequest>,

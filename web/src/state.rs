@@ -10,24 +10,24 @@ use sqlx::postgres::PgPool;
 use crate::config::Config;
 
 #[derive(Clone)]
-pub struct WebAppState(Arc<WebAppStateInner>);
+pub struct AppState(Arc<AppStateInner>);
 
 #[derive(Getters)]
-pub struct WebAppStateInner {
+pub struct AppStateInner {
     db: PgPool,
     jwks_decoder: RemoteJwksDecoder,
     config: Config,
 }
 
-impl Deref for WebAppState {
-    type Target = WebAppStateInner;
+impl Deref for AppState {
+    type Target = AppStateInner;
 
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-impl WebAppStateInner {
+impl AppStateInner {
     async fn new(config: Config) -> Result<Self, eyre::Report> {
         let db = PgPool::connect(config.database_url().expose_secret())
             .await
@@ -52,9 +52,9 @@ impl WebAppStateInner {
     }
 }
 
-impl WebAppState {
+impl AppState {
     pub async fn from_config(config: Config) -> Result<Self, eyre::Report> {
-        let inner = WebAppStateInner::new(config)
+        let inner = AppStateInner::new(config)
             .await
             .wrap_err("Failed to create app state")?;
         Ok(Self(Arc::new(inner)))

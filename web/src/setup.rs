@@ -4,14 +4,14 @@ use eyre::{Result, WrapErr};
 use sqlx::migrate;
 use tracing::info;
 
-use crate::{config::Config, state::WebAppState};
+use crate::{config::Config, state::AppState};
 
 mod logging;
 mod routes;
 mod security;
 
 pub(crate) async fn setup_app(config: Config) -> Result<Router> {
-    let app_state = WebAppState::from_config(config.clone()).await?;
+    let app_state = AppState::from_config(config.clone()).await?;
 
     // TODO: some time in the future this should be separate, exactly-once routine
     info!("Running migrations");

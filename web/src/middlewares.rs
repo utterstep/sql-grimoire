@@ -1,11 +1,13 @@
 use axum::{
     body::Body,
+    extract::State,
     http::{self, Method, Request},
     middleware::Next,
     response::IntoResponse,
 };
+use axum_extra::extract::cookie::{self, Cookie, CookieJar};
 
-use crate::models::user::User;
+use crate::{models::user::User, state::AppState};
 
 /// HTTP header to disable caching.
 ///
@@ -32,4 +34,35 @@ pub async fn require_admin(user: User, request: Request<Body>, next: Next) -> im
     }
 
     next.run(request).await
+}
+
+const CORBADO_PROJECT_ID_COOKIE: &str = "corbado_project_id";
+
+/// Middleware to add the Corbado project ID to cookies, if it's not already set.
+///
+/// Gets the projectId from the state.
+pub async fn add_corbado_project_id(
+    state: State<AppState>,
+    cookies: CookieJar,
+    request: Request<Body>,
+    next: Next,
+) -> impl IntoResponse {
+    let response = next.run(request).await;
+
+    let project_id = state.config().corbado_project_id();
+
+    if let Some(cookie) = cookies.get(CORBADO_PROJECT_ID_COOKIE) {
+        if cookie.value() == project_id {
+            return response.into_response();
+        }
+    }
+
+    let cookies = {
+        let mut cookie = Cookie::new(CORBADO_PROJECT_ID_COOKIE, project_id.to_string());
+        cookie.set_same_site(cookie::SameSite::Lax);
+
+        cookies.add(cookie)
+    };
+
+    (cookies, response).into_response()
 }

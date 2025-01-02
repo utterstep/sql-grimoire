@@ -12,7 +12,7 @@ use crate::{
     error::Result,
     models::exercise::{Exercise, ExerciseId, ExerciseSchemaListItem, NewExercise},
     partials::{app_layout, page},
-    state::WebAppState,
+    state::AppState,
     static_files,
 };
 
@@ -155,7 +155,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 pub async fn exercise_edit(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     Path(exercise_id): Path<ExerciseId>,
 ) -> Result<impl IntoResponse> {
     let mut conn = state
@@ -198,7 +198,7 @@ pub async fn exercise_edit(
 
 #[debug_handler]
 #[tracing::instrument(skip_all)]
-pub async fn exercise_new(State(state): State<WebAppState>) -> Result<impl IntoResponse> {
+pub async fn exercise_new(State(state): State<AppState>) -> Result<impl IntoResponse> {
     let mut conn = state
         .db()
         .acquire()
@@ -232,7 +232,7 @@ pub async fn exercise_new(State(state): State<WebAppState>) -> Result<impl IntoR
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 pub async fn exercise_post(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     id: Option<Path<ExerciseId>>,
     Form(form): Form<NewExercise>,
 ) -> Result<impl IntoResponse> {

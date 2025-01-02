@@ -62,9 +62,9 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
         .style_src(vec![
             "'self'",
             "unpkg.com",
+            "fonts.googleapis.com",
             // for monaco editor
             "cdn.jsdelivr.net",
-            "fonts.googleapis.com",
             "'unsafe-inline'",
         ])
         .img_src(vec!["'self'", "data:"])

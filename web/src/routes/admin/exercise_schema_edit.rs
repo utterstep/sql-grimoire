@@ -14,7 +14,7 @@ use crate::{
     error::{Result, SqlGrimoireError},
     models::exercise::{ExerciseSchema, ExerciseSchemaId},
     partials::{app_layout, page},
-    state::WebAppState,
+    state::AppState,
 };
 
 fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup {
@@ -75,7 +75,7 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 pub async fn exercise_schema_edit(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     Path(id): Path<ExerciseSchemaId>,
 ) -> Result<impl IntoResponse> {
     let mut conn = state
@@ -145,7 +145,7 @@ pub struct ExerciseSchemaForm {
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 pub async fn exercise_schema_post(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     id: Option<Path<ExerciseSchemaId>>,
     Form(form): Form<ExerciseSchemaForm>,
 ) -> Result<impl IntoResponse> {
@@ -194,7 +194,7 @@ pub async fn exercise_schema_post(
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 pub async fn exercise_schema_json(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     Path(id): Path<ExerciseSchemaId>,
 ) -> Result<impl IntoResponse> {
     let mut conn = state

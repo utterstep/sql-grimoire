@@ -2,12 +2,12 @@ use axum::{middleware, routing, Router};
 use tower_http::compression::CompressionLayer;
 
 use crate::{
-    middlewares::{no_cache, require_admin},
+    middlewares::{add_corbado_project_id, no_cache, require_admin},
     routes,
-    state::WebAppState,
+    state::AppState,
 };
 
-pub(super) fn setup(app: Router<WebAppState>, state: WebAppState) -> Router<WebAppState> {
+pub(super) fn setup(app: Router<AppState>, state: AppState) -> Router<AppState> {
     let health_router = Router::new()
         .route("/", routing::get(routes::health::health))
         .layer(middleware::from_fn(no_cache));
@@ -47,7 +47,7 @@ pub(super) fn setup(app: Router<WebAppState>, state: WebAppState) -> Router<WebA
             "/exercise/new/",
             routing::get(routes::admin::exercise_new).post(routes::admin::exercise_post),
         )
-        .layer(middleware::from_fn_with_state(state, require_admin));
+        .layer(middleware::from_fn_with_state(state.clone(), require_admin));
 
     let exercise_router = Router::new()
         .route("/:id/", routing::get(routes::exercise_run::run))
@@ -62,4 +62,8 @@ pub(super) fn setup(app: Router<WebAppState>, state: WebAppState) -> Router<WebA
         .nest("/auth/", auth_router)
         .nest("/admin/", admin_router)
         .nest("/health/", health_router)
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            add_corbado_project_id,
+        ))
 }

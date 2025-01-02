@@ -11,14 +11,14 @@ use crate::{
     error::Result,
     models::user::UserClaims,
     partials::{app_layout, page},
-    state::WebAppState,
+    state::AppState,
 };
 
 #[debug_handler]
 #[tracing::instrument(skip_all)]
 /// Main page of the web interface
 pub async fn main_page(
-    State(state): State<WebAppState>,
+    State(state): State<AppState>,
     user: Option<UserClaims>,
 ) -> Result<impl IntoResponse> {
     let user = match user {

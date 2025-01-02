@@ -6,12 +6,12 @@ use crate::{
     db::exercise,
     error::Result,
     partials::{app_layout, page},
-    state::WebAppState,
+    state::AppState,
 };
 
 #[debug_handler]
 #[tracing::instrument(skip_all)]
-pub async fn exercise_schema_list(State(state): State<WebAppState>) -> Result<impl IntoResponse> {
+pub async fn exercise_schema_list(State(state): State<AppState>) -> Result<impl IntoResponse> {
     let mut txn = state
         .db()
         .begin()
