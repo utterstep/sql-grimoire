@@ -95,8 +95,14 @@ pub fn footer() -> Markup {
 
     html! {
         footer class="footer" {
-            p class="footer_content" {
-                ("© ") (current_year) (" V")
+            div class="footer__container" {
+                div class="footer__content" {
+                    p class="footer__text" {
+                        "Made with "
+                        i data-lucide="heart" class="footer__icon footer__icon--heart" {}
+                        " by V, " (current_year)
+                    }
+                }
             }
         }
     }
