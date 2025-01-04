@@ -2,7 +2,7 @@ use axum::{middleware, routing, Router};
 use tower_http::compression::CompressionLayer;
 
 use crate::{
-    middlewares::{add_corbado_project_id, no_cache, require_admin},
+    middlewares::{add_corbado_project_id, no_cache, require_admin, require_auth},
     routes,
     state::AppState,
 };
@@ -54,9 +54,14 @@ pub(super) fn setup(app: Router<AppState>, state: AppState) -> Router<AppState> 
         .route(
             "/:id/submit/",
             routing::post(routes::exercise_run::submit_solution),
-        );
+        )
+        .layer(middleware::from_fn_with_state(state.clone(), require_auth));
 
-    app.route("/", routing::get(routes::main::main_page))
+    let main_page_router = Router::new()
+        .route("/", routing::get(routes::main::main_page))
+        .layer(middleware::from_fn_with_state(state.clone(), require_auth));
+
+    app.nest("/", main_page_router)
         .nest("/static/", static_router)
         .nest("/exercise/", exercise_router)
         .nest("/auth/", auth_router)

@@ -9,6 +9,7 @@ import {
     Edit,
     Plus,
     Send,
+    Settings,
     Trash2,
 } from 'https://esm.sh/lucide@0.469.0';
 
@@ -22,6 +23,7 @@ const icons = {
     Edit,
     Plus,
     Send,
+    Settings,
     Trash2,
 };
 

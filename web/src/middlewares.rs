@@ -3,12 +3,15 @@ use axum::{
     extract::State,
     http::{self, Method, Request},
     middleware::Next,
-    response::IntoResponse,
+    response::{IntoResponse, Redirect},
 };
 use axum_extra::extract::cookie::{self, Cookie, CookieJar};
 use time::Duration;
 
-use crate::{models::user::User, state::AppState};
+use crate::{
+    models::user::{User, UserClaims},
+    state::AppState,
+};
 
 /// HTTP header to disable caching.
 ///
@@ -26,6 +29,21 @@ pub async fn no_cache(method: Method, request: Request<Body>, next: Next) -> imp
         Method::GET | Method::HEAD | Method::OPTIONS => ([NO_CACHE], response).into_response(),
         _ => response,
     }
+}
+
+/// Middleware to check if the user is authenticated.
+///
+/// Redirects to /auth/login/ if the user is not authenticated.
+pub async fn require_auth(
+    user: Option<UserClaims>,
+    request: Request<Body>,
+    next: Next,
+) -> impl IntoResponse {
+    if user.is_none() {
+        return Redirect::to("/auth/login/").into_response();
+    }
+
+    next.run(request).await
 }
 
 /// Middleware to check if the user is admin.

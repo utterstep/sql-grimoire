@@ -4,6 +4,7 @@ use axum::{
     http,
     response::IntoResponse,
 };
+use axum_extra::extract::Cached;
 use eyre::{OptionExt, WrapErr};
 use maud::{html, PreEscaped};
 use serde::Deserialize;
@@ -11,7 +12,10 @@ use serde::Deserialize;
 use crate::{
     db::{exercise, exercise_solution},
     error::Result,
-    models::{exercise::ExerciseId, user::UserClaims},
+    models::{
+        exercise::ExerciseId,
+        user::{User, UserClaims},
+    },
     partials::{app_layout, page},
     state::AppState,
     static_files::{
@@ -25,7 +29,8 @@ use crate::{
 pub async fn run(
     State(state): State<AppState>,
     Path(exercise_id): Path<ExerciseId>,
-    user: UserClaims,
+    Cached(user): Cached<User>,
+    user_claims: UserClaims,
 ) -> Result<impl IntoResponse> {
     let mut conn = state
         .db()
@@ -46,7 +51,7 @@ pub async fn run(
         .wrap_err("Failed to query exercise schema")?
         .ok_or_eyre("Exercise schema not found")?;
 
-    let solution = exercise_solution::get_last_user_solution(&mut conn, &user, exercise_id)
+    let solution = exercise_solution::get_last_user_solution(&mut conn, &user_claims, exercise_id)
         .await
         .wrap_err("Failed to query user solution")?;
 
@@ -194,6 +199,7 @@ pub async fn run(
             script defer type="module" src={"/static/" (solution_submit_controller.name)} {}
         },
         exercise.name(),
+        user.is_admin(),
     );
 
     Ok(page(&title, inner).into_response())

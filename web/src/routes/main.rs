@@ -1,15 +1,12 @@
-use axum::{
-    debug_handler,
-    extract::State,
-    response::{IntoResponse, Redirect},
-};
+use axum::{debug_handler, extract::State, response::IntoResponse};
+use axum_extra::extract::Cached;
 use eyre::WrapErr;
 use maud::html;
 
 use crate::{
-    db::{exercise, user},
+    db::exercise,
     error::Result,
-    models::user::UserClaims,
+    models::user::User,
     partials::{app_layout, page},
     state::AppState,
 };
@@ -19,23 +16,13 @@ use crate::{
 /// Main page of the web interface
 pub async fn main_page(
     State(state): State<AppState>,
-    user: Option<UserClaims>,
+    Cached(user): Cached<User>,
 ) -> Result<impl IntoResponse> {
-    let user = match user {
-        Some(user) => user,
-        None => return Ok(Redirect::to("/auth/login/").into_response()),
-    };
-
     let mut txn = state
         .db()
         .begin()
         .await
         .wrap_err("Failed to start transaction")?;
-
-    let user = match user::get_user(&mut txn, &user).await? {
-        Some(user) => user,
-        None => return Ok(Redirect::to("/auth/login/").into_response()),
-    };
 
     let exercises = exercise::get_exercise_list(&mut txn, user.id()).await?;
 
@@ -95,5 +82,9 @@ pub async fn main_page(
         }
     };
 
-    Ok(page("SQL Grimoire", app_layout(inner, "SQL Grimoire")).into_response())
+    Ok(page(
+        "SQL Grimoire",
+        app_layout(inner, "SQL Grimoire", user.is_admin()),
+    )
+    .into_response())
 }

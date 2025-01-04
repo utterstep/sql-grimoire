@@ -5,6 +5,7 @@ use axum::{
     response::{IntoResponse, Redirect},
     Json,
 };
+use axum_extra::extract::Cached;
 use eyre::WrapErr;
 use maud::html;
 use serde::Deserialize;
@@ -12,7 +13,10 @@ use serde::Deserialize;
 use crate::{
     db::exercise,
     error::{Result, SqlGrimoireError},
-    models::exercise::{ExerciseSchema, ExerciseSchemaId},
+    models::{
+        exercise::{ExerciseSchema, ExerciseSchemaId},
+        user::User,
+    },
     partials::{app_layout, page},
     state::AppState,
 };
@@ -77,6 +81,7 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
 pub async fn exercise_schema_edit(
     State(state): State<AppState>,
     Path(id): Path<ExerciseSchemaId>,
+    Cached(user): Cached<User>,
 ) -> Result<impl IntoResponse> {
     let mut conn = state
         .db()
@@ -109,6 +114,7 @@ pub async fn exercise_schema_edit(
             (form)
         },
         "SQL Grimoire - Exercise Schema Edit",
+        user.is_admin(),
     );
 
     Ok(page("SQL Grimoire - Exercise Schema Edit", inner).into_response())
@@ -116,7 +122,10 @@ pub async fn exercise_schema_edit(
 
 #[debug_handler]
 #[tracing::instrument(skip_all)]
-pub async fn exercise_schema_new() -> Result<impl IntoResponse> {
+pub async fn exercise_schema_new(
+    State(_state): State<AppState>,
+    Cached(user): Cached<User>,
+) -> Result<impl IntoResponse> {
     let form = exercise_schema_form(None);
     let inner = app_layout(
         html! {
@@ -131,6 +140,7 @@ pub async fn exercise_schema_new() -> Result<impl IntoResponse> {
             (form)
         },
         "SQL Grimoire - Exercise Schema New",
+        user.is_admin(),
     );
 
     Ok(page("SQL Grimoire - Exercise Schema New", inner).into_response())

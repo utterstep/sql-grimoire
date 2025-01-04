@@ -4,13 +4,17 @@ use axum::{
     http,
     response::{IntoResponse, Redirect},
 };
+use axum_extra::extract::Cached;
 use eyre::WrapErr;
 use maud::{html, Markup};
 
 use crate::{
     db::exercise,
     error::Result,
-    models::exercise::{Exercise, ExerciseId, ExerciseSchemaListItem, NewExercise},
+    models::{
+        exercise::{Exercise, ExerciseId, ExerciseSchemaListItem, NewExercise},
+        user::User,
+    },
     partials::{app_layout, page},
     state::AppState,
     static_files,
@@ -157,6 +161,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
 pub async fn exercise_edit(
     State(state): State<AppState>,
     Path(exercise_id): Path<ExerciseId>,
+    Cached(user): Cached<User>,
 ) -> Result<impl IntoResponse> {
     let mut conn = state
         .db()
@@ -191,6 +196,7 @@ pub async fn exercise_edit(
             (form)
         },
         "SQL Grimoire - Exercise Edit",
+        user.is_admin(),
     );
 
     Ok(page("SQL Grimoire - Exercise Edit", inner).into_response())
@@ -198,7 +204,10 @@ pub async fn exercise_edit(
 
 #[debug_handler]
 #[tracing::instrument(skip_all)]
-pub async fn exercise_new(State(state): State<AppState>) -> Result<impl IntoResponse> {
+pub async fn exercise_new(
+    State(state): State<AppState>,
+    Cached(user): Cached<User>,
+) -> Result<impl IntoResponse> {
     let mut conn = state
         .db()
         .acquire()
@@ -224,6 +233,7 @@ pub async fn exercise_new(State(state): State<AppState>) -> Result<impl IntoResp
             (form)
         },
         "SQL Grimoire - New Exercise",
+        user.is_admin(),
     );
 
     Ok(page("SQL Grimoire - New Exercise", inner).into_response())

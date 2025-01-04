@@ -60,7 +60,7 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
 }
 
 /// App layout template.
-pub fn app_layout(content: Markup, title: &str) -> Markup {
+pub fn app_layout(content: Markup, title: &str, is_admin: bool) -> Markup {
     html! {
         div class="app" {
             nav class="nav" {
@@ -68,6 +68,14 @@ pub fn app_layout(content: Markup, title: &str) -> Markup {
                     a href="/" class="nav__brand" {
                         i data-lucide="book-open" class="nav__icon" {}
                         span class="nav__title" { (title) }
+                    }
+                    div class="nav__menu" {
+                        @if is_admin {
+                            a href="/admin/exercise/schemas/" class="nav__link" {
+                                i data-lucide="settings" class="nav__link-icon" {}
+                                span { "Schemas" }
+                            }
+                        }
                     }
                 }
             }

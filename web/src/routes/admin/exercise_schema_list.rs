@@ -1,17 +1,22 @@
 use axum::{debug_handler, extract::State, response::IntoResponse};
+use axum_extra::extract::Cached;
 use eyre::WrapErr;
 use maud::html;
 
 use crate::{
     db::exercise,
     error::Result,
+    models::user::User,
     partials::{app_layout, page},
     state::AppState,
 };
 
 #[debug_handler]
 #[tracing::instrument(skip_all)]
-pub async fn exercise_schema_list(State(state): State<AppState>) -> Result<impl IntoResponse> {
+pub async fn exercise_schema_list(
+    State(state): State<AppState>,
+    Cached(user): Cached<User>,
+) -> Result<impl IntoResponse> {
     let mut txn = state
         .db()
         .begin()
@@ -68,7 +73,7 @@ pub async fn exercise_schema_list(State(state): State<AppState>) -> Result<impl 
 
     Ok(page(
         "Exercise Schemas",
-        app_layout(inner, "SQL Grimoire – Exercise Schemas"),
+        app_layout(inner, "SQL Grimoire – Exercise Schemas", user.is_admin()),
     )
     .into_response())
 }
