@@ -72,7 +72,7 @@ pub fn app_layout(content: Markup, title: &str, is_admin: bool) -> Markup {
                     div class="nav__menu" {
                         @if is_admin {
                             a href="/admin/exercise/schemas/" class="nav__link" {
-                                i data-lucide="settings" class="nav__link-icon" {}
+                                i data-lucide="database" class="nav__link-icon" {}
                                 span { "Schemas" }
                             }
                         }
