@@ -2,6 +2,7 @@ use static_file_util::process_file;
 
 fn main() {
     process_file("static/main.css", "main_css_HASH");
+    process_file("static/reset.css", "reset_css_HASH");
 
     process_file("static/js/corbado-init.js", "corbado_init_HASH");
     process_file("static/js/corbado-login.js", "corbado_login_HASH");

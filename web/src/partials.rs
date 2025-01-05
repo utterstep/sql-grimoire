@@ -31,6 +31,7 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
         head {
             meta charset="utf-8";
             title { (page_title) }
+            link rel="stylesheet" href={"/static/" (static_files::reset_css.name)};
             link rel="stylesheet" href={"/static/" (static_files::main_css.name)};
 
             // Turbo

@@ -87,7 +87,7 @@ pub async fn run(
                     div class="panel panel--exercise" {
                         h2 class="panel__title" { (exercise.name()) }
                         div class="panel__content" {
-                            p class="panel__text" { (PreEscaped(question_html)) }
+                            div class="panel__text" { (PreEscaped(question_html)) }
                             div
                                 class="table-info"
                             {

@@ -2,6 +2,7 @@ use static_file_util::static_files;
 
 static_files!(
     (main_css, "../static/main.css", mime::TEXT_CSS),
+    (reset_css, "../static/reset.css", mime::TEXT_CSS),
     (
         corbado_init,
         "../static/js/corbado-init.js",

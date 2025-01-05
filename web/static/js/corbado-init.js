@@ -15,7 +15,6 @@ if (!window.CORBADO_LOADED) {
     await Corbado.load({
         darkMode: 'on',
         projectId,
-        debug: true,
     });
 
     window.CORBADO_LOADED = true;
