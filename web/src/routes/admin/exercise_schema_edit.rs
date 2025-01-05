@@ -19,6 +19,7 @@ use crate::{
     },
     partials::{app_layout, page},
     state::AppState,
+    static_files,
 };
 
 fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup {
@@ -34,7 +35,13 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
         .unwrap_or_default();
 
     html! {
-        form class="form" method="post" {
+        form
+            #db
+            data-controller="db mermaid-schema-vis"
+            data-mermaid-schema-vis-db-outlet="#db"
+            class="form"
+            method="post"
+        {
             h1 class="form__title" { "Edit Schema" }
             div class="form__group" {
                 label class="form__label" { "Name" }
@@ -49,6 +56,7 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
             div class="form__group" {
                 label class="form__label" { "SQL Schema" }
                 textarea
+                    data-db-target="schema"
                     name="schema"
                     class="form__textarea"
                     placeholder="Enter SQL schema definition"
@@ -57,11 +65,25 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
                         (schema)
                     }
             }
+
+            div class="form__group" {
+                label class="form__label" { "Schema Diagram" }
+                div
+                    #schema-vis
+                    data-mermaid-schema-vis-target="schemaVis" {}
+            }
+
             div class="form__actions" {
                 a href="/admin/exercise/schemas/" {
                     button class="button button--secondary" {
                         "Cancel"
                     }
+                }
+                button
+                    data-action="mermaid-schema-vis#drawSchema"
+                    class="button button--secondary"
+                {
+                    "Draw Schema"
                 }
                 input
                     type="submit"
@@ -72,6 +94,9 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
                         "Create Schema"
                     });
             }
+
+            script type="module" src={"/static/" (static_files::db_controller.name)} {}
+            script type="module" src={"/static/" (static_files::mermaid_schema_vis_controller.name)} {}
         }
     }
 }

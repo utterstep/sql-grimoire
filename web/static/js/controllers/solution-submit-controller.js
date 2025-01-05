@@ -14,7 +14,7 @@ class SolutionSubmitController extends Controller {
             );
         });
 
-        // post to current url + submit with json { query, result }
+        // post to current url + submit/ with json { query, result }
         const url = new URL(window.location.href);
         url.pathname += 'submit/';
 

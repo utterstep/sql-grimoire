@@ -25,6 +25,10 @@ fn main() {
         "highlight_controller_HASH",
     );
     process_file(
+        "static/js/controllers/mermaid-schema-vis-controller.js",
+        "mermaid_schema_vis_controller_HASH",
+    );
+    process_file(
         "static/js/controllers/schema-hidden-controller.js",
         "schema_hidden_controller_HASH",
     );

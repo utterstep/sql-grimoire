@@ -188,8 +188,6 @@ pub async fn run(
                         "Run the query to see the results"
                     }
                 }
-
-
             }
 
             script defer src={"/static/" (static_files::monaco_init.name)} {}

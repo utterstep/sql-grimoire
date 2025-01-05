@@ -52,7 +52,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
                         name="schema_id"
                         required
                         data-schema-hidden-target="schemaSelector"
-                        data-action="schema-hidden#processChange"
+                        data-action="schema-hidden#fetchSchema"
                     {
                         @for schema in schemas {
                             option

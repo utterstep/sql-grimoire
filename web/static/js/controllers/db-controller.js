@@ -20,6 +20,8 @@ export default class DbController extends Controller {
         this.db = await PGlite.create();
 
         await this.db.exec(schema);
+
+        this.dispatch('db-created');
     }
 
     async runQuery(query) {
@@ -28,6 +30,12 @@ export default class DbController extends Controller {
         }
 
         return await this.db.query(query, [], { rowMode: 'array' });
+    }
+
+    async disconnect() {
+        if (this.db) {
+            await this.db.close();
+        }
     }
 }
 

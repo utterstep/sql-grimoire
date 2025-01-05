@@ -46,6 +46,11 @@ static_files!(
         mime::TEXT_JAVASCRIPT
     ),
     (
+        mermaid_schema_vis_controller,
+        "../static/js/controllers/mermaid-schema-vis-controller.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    (
         schema_hidden_controller,
         "../static/js/controllers/schema-hidden-controller.js",
         mime::TEXT_JAVASCRIPT
