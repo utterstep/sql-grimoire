@@ -608,9 +608,9 @@ html {
 .schema-sidebar {
     position: fixed;
     top: 0;
-    right: -24rem;
+    right: -28rem;
     /* Start off-screen */
-    width: 24rem;
+    width: 28rem;
     height: 100vh;
     background-color: #1e293b;
     border-left: 1px solid #334155;

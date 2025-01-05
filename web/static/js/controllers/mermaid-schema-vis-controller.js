@@ -1,5 +1,6 @@
 import { Controller } from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+import Panzoom from 'https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/+esm'
 
 export default class MermaidSchemaVisController extends Controller {
     static targets = ['schemaVis'];
@@ -197,7 +198,13 @@ export default class MermaidSchemaVisController extends Controller {
     }
 
     connect() {
-        mermaid.initialize({ startOnLoad: false });
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            themeConfig: {
+                zoom: true,
+            }
+        });
     }
 
     async drawSchema(e) {
@@ -213,6 +220,16 @@ export default class MermaidSchemaVisController extends Controller {
 
         // run mermaid
         mermaid.run();
+
+        this.panzoom = Panzoom(this.schemaVisTarget, {
+            minScale: 1,
+            maxScale: 2.5,
+        });
+        this.schemaVisTarget.parentElement.addEventListener('wheel', this.panzoom.zoomWithWheel)
+    }
+
+    disconnect() {
+        this.panzoom.destroy();
     }
 }
 
