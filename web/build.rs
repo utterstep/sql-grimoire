@@ -13,6 +13,10 @@ fn main() {
 
     // controllers
     process_file(
+        "static/js/controllers/db-controller.js",
+        "db_controller_HASH",
+    );
+    process_file(
         "static/js/controllers/editor-controller.js",
         "editor_controller_HASH",
     );

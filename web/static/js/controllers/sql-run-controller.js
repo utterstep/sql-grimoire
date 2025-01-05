@@ -2,49 +2,14 @@ import { Controller } from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.
 import { PGlite } from 'https://cdn.jsdelivr.net/npm/@electric-sql/pglite/dist/index.js';
 
 class SqlRunController extends Controller {
-    static targets = ['schema', 'results'];
-    static outlets = ['editor'];
-
-    async connect() {
-        const schemaCreationQueries = this.schemaTarget.textContent;
-
-        if (schemaCreationQueries) {
-            await this.resetDb(schemaCreationQueries);
-        }
-    }
-
-    async schemaUpdated({ detail: { schema: { schema } } }) {
-        console.log('schemaUpdated', schema);
-
-        await this.resetDb(schema);
-    }
-
-    async resetDb(schema) {
-        this.db = await PGlite.create();
-
-        await this.db.exec(schema);
-    }
-
-    async runQuery(query) {
-        if (!this.db) {
-            throw new Error('Database not initialized');
-        }
-
-        const result = await this.db.query(query, [], { rowMode: 'array' });
-
-        return result;
-    }
-
-    getQuery() {
-        return this.editorOutlet.getValue();
-    }
+    static targets = ['results'];
+    static outlets = ['editor', 'db'];
 
     async execute(e) {
         e.preventDefault();
 
-        const query = this.getQuery();
-
-        const result = await this.runQuery(query);
+        const query = this.editorOutlet.getValue();
+        const result = await this.dbOutlet.runQuery(query);
 
         console.log('result', result);
 
@@ -80,8 +45,8 @@ class SqlRunController extends Controller {
     async executeToTextArea(e) {
         e.preventDefault();
 
-        const query = this.getQuery();
-        const result = await this.runQuery(query);
+        const query = this.editorOutlet.getValue();
+        const result = await this.dbOutlet.runQuery(query);
 
         // reformat result to be a array of objects
         const formattedResult = result.rows.map((row) => {

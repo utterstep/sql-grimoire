@@ -1,11 +1,11 @@
 import { Controller } from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
 
 class SolutionSubmitController extends Controller {
-    static outlets = ['sql-run', 'editor'];
+    static outlets = ['db', 'editor'];
 
     async submit() {
         const query = this.editorOutlet.getValue();
-        const result = await this.sqlRunOutlet.runQuery(query);
+        const result = await this.dbOutlet.runQuery(query);
 
         // reformat result to be a array of objects
         const formattedResult = result.rows.map((row) => {

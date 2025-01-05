@@ -34,9 +34,11 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
 
     html! {
         form
-            data-controller="sql-run schema-hidden"
-            data-action="schema-hidden:schema-updated->sql-run#schemaUpdated"
+            #db
+            data-controller="sql-run schema-hidden db"
+            data-action="schema-hidden:schema-updated->db#schemaUpdated"
             data-sql-run-editor-outlet="#editor"
+            data-sql-run-db-outlet="#db"
             class="form"
             method="post"
         {
@@ -64,7 +66,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
                 }
 
                 div
-                    data-sql-run-target="schema"
+                    data-db-target="schema"
                     data-schema-hidden-target="schemaHidden"
                     class="hidden" {}
             }
@@ -153,6 +155,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
 
         script type="module" src={"/static/" (static_files::schema_hidden_controller.name)} {}
         script type="module" src={"/static/" (static_files::editor_controller.name)} {}
+        script defer type="module" src={"/static/" (static_files::db_controller.name)} {}
         script defer type="module" src={"/static/" (static_files::sql_run_controller.name)} {}
     }
 }

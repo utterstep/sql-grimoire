@@ -74,11 +74,12 @@ pub async fn run(
                 }
             }
             turbo-frame
-                #sql-run
-                data-controller="sql-run solution-submit highlight"
+                #db
+                data-controller="sql-run solution-submit highlight db"
                 data-sql-run-editor-outlet="#editor"
+                data-sql-run-db-outlet="#db"
                 data-solution-submit-editor-outlet="#editor"
-                data-solution-submit-sql-run-outlet="#sql-run"
+                data-solution-submit-db-outlet="#db"
             {
                 div class="grid" {
                     div class="panel panel--exercise" {
@@ -96,7 +97,7 @@ pub async fn run(
                                         code
                                             class="language-pgsql"
                                             data-highlight-target="code"
-                                            data-sql-run-target="schema"
+                                            data-db-target="schema"
                                         {
                                             (schema.schema())
                                         }
@@ -193,6 +194,7 @@ pub async fn run(
 
             script defer src={"/static/" (static_files::monaco_init.name)} {}
             script defer type="module" src={"/static/" (static_files::editor_controller.name)} {}
+            script defer type="module" src={"/static/" (static_files::db_controller.name)} {}
             script defer type="module" src={"/static/" (static_files::sql_run_controller.name)} {}
             script defer type="module" src={"/static/" (static_files::solution_submit_controller.name)} {}
         },

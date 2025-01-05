@@ -31,6 +31,11 @@ static_files!(
     ),
     // controllers
     (
+        db_controller,
+        "../static/js/controllers/db-controller.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    (
         editor_controller,
         "../static/js/controllers/editor-controller.js",
         mime::TEXT_JAVASCRIPT
