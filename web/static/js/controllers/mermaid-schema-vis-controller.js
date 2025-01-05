@@ -201,8 +201,6 @@ export default class MermaidSchemaVisController extends Controller {
     }
 
     async drawSchema(e) {
-        e.preventDefault();
-
         const { entities, relationships, indexes: _indexes } = await this.getDbData(this.dbOutlet.db);
         const diagram = this.generateDiagram({ entities, relationships });
 
@@ -213,6 +211,7 @@ export default class MermaidSchemaVisController extends Controller {
         pre.textContent = diagram;
         this.schemaVisTarget.replaceChildren(pre);
 
+        // run mermaid
         mermaid.run();
     }
 }

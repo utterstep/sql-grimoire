@@ -8,34 +8,49 @@ class SqlRunController extends Controller {
         e.preventDefault();
 
         const query = this.editorOutlet.getValue();
-        const result = await this.dbOutlet.runQuery(query);
 
-        console.log('result', result);
+        let html;
 
-        if (!result.fields || !result.fields.length) {
-            this.resultsTarget.innerHTML = 'No results';
+        try {
+            const result = await this.dbOutlet.runQuery(query);
 
-            console.warn('Unexpected result', result);
+            console.log('result', result);
 
-            return;
-        }
+            if (!result.fields || !result.fields.length) {
+                this.resultsTarget.innerHTML = 'No results';
 
-        let html = `
-            <table class="table">
-                <thead>
-                    <tr>
-                        ${result.fields.map(field => `<th class="table__header">${field.name}</th>`).join('')}
-                    </tr>
-                </thead>
-                <tbody>
-                    ${result.rows.map(row => `
+                console.warn('Unexpected result', result);
+
+                return;
+            }
+
+            html = `
+                <table class="table">
+                    <thead>
                         <tr>
-                            ${row.map(value => `<td class="table__cell">${value}</td>`).join('')}
+                            ${result.fields.map(field => `<th class="table__header">${field.name}</th>`).join('')}
                         </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
+                    </thead>
+                    <tbody>
+                        ${result.rows.map(row => `
+                            <tr>
+                                ${row.map(value => `<td class="table__cell">${value}</td>`).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        } catch (e) {
+            console.error(e);
+
+            const targetClass = `${this.resultsTarget.classList[0]}__error`;
+
+            html = `
+                <div class="${targetClass}">
+                    <p>Error: ${e.message}</p>
+                </div>
+            `;
+        }
 
         this.resultsTarget.innerHTML = html;
         this.resultsTarget.scrollIntoView({ behavior: 'smooth' });

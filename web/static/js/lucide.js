@@ -10,6 +10,7 @@ import {
     Heart,
     Plus,
     Send,
+    TableProperties,
     Trash2,
 } from 'https://esm.sh/lucide@0.469.0';
 
@@ -24,6 +25,7 @@ const icons = {
     Heart,
     Plus,
     Send,
+    TableProperties,
     Trash2,
 };
 

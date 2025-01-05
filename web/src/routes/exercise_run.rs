@@ -75,11 +75,13 @@ pub async fn run(
             }
             turbo-frame
                 #db
-                data-controller="sql-run solution-submit highlight db"
+                data-controller="sql-run solution-submit highlight db mermaid-schema-vis"
+                data-action="db:db-created->mermaid-schema-vis#drawSchema"
                 data-sql-run-editor-outlet="#editor"
                 data-sql-run-db-outlet="#db"
                 data-solution-submit-editor-outlet="#editor"
                 data-solution-submit-db-outlet="#db"
+                data-mermaid-schema-vis-db-outlet="#db"
             {
                 div class="grid" {
                     div class="panel panel--exercise" {
@@ -91,7 +93,7 @@ pub async fn run(
                             {
                                 details class="table-info__details" {
                                     summary class="table-info__summary" {
-                                        h3 class="table-info__title" { "Table Structure" }
+                                        h3 class="table-info__title" { "Database Definitions" }
                                     }
                                     pre class="table-info__schema" {
                                         code
@@ -119,6 +121,33 @@ pub async fn run(
                             h3 class="editor__title" { "Query Editor" }
 
                             div class="editor__actions" {
+                                input
+                                    type="checkbox"
+                                    id="schema-toggle"
+                                    class="schema-toggle"
+                                {}
+
+                                label
+                                    for="schema-toggle"
+                                    class="button button--secondary"
+                                {
+                                    i data-lucide="table-properties" class="button__icon" {}
+                                    span { "Show Schema" }
+                                }
+
+                                div class="schema-sidebar" {
+                                    div class="schema-sidebar__content" {
+                                        div class="schema-sidebar__header" {
+                                            h2 class="schema-sidebar__title" { (schema.name()) }
+                                        }
+
+                                        div
+                                            class="schema-sidebar__body"
+                                            data-mermaid-schema-vis-target="schemaVis"
+                                        {}
+                                    }
+                                }
+
                                 button
                                     class="button button--secondary"
                                     data-action="sql-run#execute"
@@ -190,9 +219,11 @@ pub async fn run(
                 }
             }
 
-            script defer src={"/static/" (static_files::monaco_init.name)} {}
+            script type="module" src={"/static/" (static_files::db_controller.name)} {}
+            script type="module" src={"/static/" (static_files::mermaid_schema_vis_controller.name)} {}
+
+            script defer type="module" src={"/static/" (static_files::monaco_init.name)} {}
             script defer type="module" src={"/static/" (static_files::editor_controller.name)} {}
-            script defer type="module" src={"/static/" (static_files::db_controller.name)} {}
             script defer type="module" src={"/static/" (static_files::sql_run_controller.name)} {}
             script defer type="module" src={"/static/" (static_files::solution_submit_controller.name)} {}
         },

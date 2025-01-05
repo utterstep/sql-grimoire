@@ -38,6 +38,7 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
         form
             #db
             data-controller="db mermaid-schema-vis"
+            data-action="db:db-created->mermaid-schema-vis#drawSchema"
             data-mermaid-schema-vis-db-outlet="#db"
             class="form"
             method="post"
@@ -80,7 +81,7 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
                     }
                 }
                 button
-                    data-action="mermaid-schema-vis#drawSchema"
+                    data-action="db#resetDbRequest:prevent"
                     class="button button--secondary"
                 {
                     "Draw Schema"

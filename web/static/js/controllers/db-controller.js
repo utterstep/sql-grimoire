@@ -5,18 +5,37 @@ export default class DbController extends Controller {
     static targets = ['schema'];
 
     async connect() {
-        const schemaCreationQueries = this.hasSchemaTarget ? this.schemaTarget.textContent : null;
+        const schemaCreationQueries = this.getSchema();
 
         if (schemaCreationQueries) {
             await this.resetDb(schemaCreationQueries);
         }
     }
 
+    getSchema() {
+        // check the value first (bc textarea has both value and textContent)
+        return this.hasSchemaTarget && (this.schemaTarget.value || this.schemaTarget.textContent);
+    }
+
     async schemaUpdated({ detail: { schema: { schema } } }) {
         await this.resetDb(schema);
     }
 
+    async resetDbRequest(e) {
+        const schema = this.getSchema();
+
+        if (!schema) {
+            return;
+        }
+
+        await this.resetDb(schema);
+    }
+
     async resetDb(schema) {
+        if (this.db) {
+            await this.db.close();
+        }
+
         this.db = await PGlite.create();
 
         await this.db.exec(schema);
