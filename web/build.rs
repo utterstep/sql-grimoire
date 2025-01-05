@@ -13,12 +13,12 @@ fn main() {
 
     // controllers
     process_file(
-        "static/js/controllers/highlight-controller.js",
-        "highlight_controller_HASH",
+        "static/js/controllers/editor-controller.js",
+        "editor_controller_HASH",
     );
     process_file(
-        "static/js/controllers/monaco-controller.js",
-        "monaco_controller_HASH",
+        "static/js/controllers/highlight-controller.js",
+        "highlight_controller_HASH",
     );
     process_file(
         "static/js/controllers/schema-hidden-controller.js",
@@ -27,10 +27,6 @@ fn main() {
     process_file(
         "static/js/controllers/solution-submit-controller.js",
         "solution_submit_controller_HASH",
-    );
-    process_file(
-        "static/js/controllers/simple-editor.js",
-        "simple_editor_controller_HASH",
     );
     process_file(
         "static/js/controllers/sql-run-controller.js",

@@ -31,23 +31,18 @@ static_files!(
     ),
     // controllers
     (
+        editor_controller,
+        "../static/js/controllers/editor-controller.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    (
         highlight_controller,
         "../static/js/controllers/highlight-controller.js",
         mime::TEXT_JAVASCRIPT
     ),
     (
-        monaco_controller,
-        "../static/js/controllers/monaco-controller.js",
-        mime::TEXT_JAVASCRIPT
-    ),
-    (
         schema_hidden_controller,
         "../static/js/controllers/schema-hidden-controller.js",
-        mime::TEXT_JAVASCRIPT
-    ),
-    (
-        simple_editor_controller,
-        "../static/js/controllers/simple-editor.js",
         mime::TEXT_JAVASCRIPT
     ),
     (

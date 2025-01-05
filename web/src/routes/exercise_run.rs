@@ -18,10 +18,7 @@ use crate::{
     },
     partials::{app_layout, page},
     state::AppState,
-    static_files::{
-        highlight_controller, monaco_controller, monaco_init, solution_submit_controller,
-        sql_run_controller,
-    },
+    static_files,
 };
 
 #[debug_handler]
@@ -79,8 +76,8 @@ pub async fn run(
             turbo-frame
                 #sql-run
                 data-controller="sql-run solution-submit highlight"
-                data-sql-run-monaco-outlet="#editor"
-                data-solution-submit-monaco-outlet="#editor"
+                data-sql-run-editor-outlet="#editor"
+                data-solution-submit-editor-outlet="#editor"
                 data-solution-submit-sql-run-outlet="#sql-run"
             {
                 div class="grid" {
@@ -106,7 +103,7 @@ pub async fn run(
                                     }
                                 }
 
-                                script type="module" src={"/static/" (highlight_controller.name)} {}
+                                script type="module" src={"/static/" (static_files::highlight_controller.name)} {}
                             }
                         }
                     }
@@ -114,7 +111,8 @@ pub async fn run(
                     div
                         #editor
                         class="panel panel--editor"
-                        data-controller="monaco"
+                        data-controller="editor"
+                        data-editor-mode-value="monaco"
                     {
                         div class="editor__header" {
                             h3 class="editor__title" { "Query Editor" }
@@ -141,7 +139,7 @@ pub async fn run(
                             class="editor__textarea"
                             placeholder="Write your SQL query here..."
                             data-language="pgsql"
-                            data-monaco-target="editor"
+                            data-editor-target="editor"
                         {
                             (solution.as_ref().map(|s| s.query().as_str()).unwrap_or(""))
                         }
@@ -193,10 +191,10 @@ pub async fn run(
 
             }
 
-            script defer src={"/static/" (monaco_init.name)} {}
-            script defer type="module" src={"/static/" (monaco_controller.name)} {}
-            script defer type="module" src={"/static/" (sql_run_controller.name)} {}
-            script defer type="module" src={"/static/" (solution_submit_controller.name)} {}
+            script defer src={"/static/" (static_files::monaco_init.name)} {}
+            script defer type="module" src={"/static/" (static_files::editor_controller.name)} {}
+            script defer type="module" src={"/static/" (static_files::sql_run_controller.name)} {}
+            script defer type="module" src={"/static/" (static_files::solution_submit_controller.name)} {}
         },
         exercise.name(),
         user.is_admin(),

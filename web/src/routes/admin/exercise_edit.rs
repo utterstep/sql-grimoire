@@ -36,7 +36,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
         form
             data-controller="sql-run schema-hidden"
             data-action="schema-hidden:schema-updated->sql-run#schemaUpdated"
-            data-sql-run-simple-editor-outlet="#editor"
+            data-sql-run-editor-outlet="#editor"
             class="form"
             method="post"
         {
@@ -100,13 +100,14 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
                 div
                     #editor
                     class="query-editor"
-                    data-controller="simple-editor"
+                    data-controller="editor"
+                    data-editor-mode-value="simple"
                 {
                     textarea
                         class="form__textarea"
                         name="expected_query"
                         placeholder="Enter expected SQL query"
-                        data-simple-editor-target="editor"
+                        data-editor-target="editor"
                         required
                         {
                             (exercise.map(|ex| ex.expected_query().to_owned()).unwrap_or_default())
@@ -151,7 +152,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
         }
 
         script type="module" src={"/static/" (static_files::schema_hidden_controller.name)} {}
-        script type="module" src={"/static/" (static_files::simple_editor_controller.name)} {}
+        script type="module" src={"/static/" (static_files::editor_controller.name)} {}
         script defer type="module" src={"/static/" (static_files::sql_run_controller.name)} {}
     }
 }

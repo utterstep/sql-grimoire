@@ -3,7 +3,7 @@ import { PGlite } from 'https://cdn.jsdelivr.net/npm/@electric-sql/pglite/dist/i
 
 class SqlRunController extends Controller {
     static targets = ['schema', 'results'];
-    static outlets = ['simple-editor', 'monaco'];
+    static outlets = ['editor'];
 
     async connect() {
         const schemaCreationQueries = this.schemaTarget.textContent;
@@ -36,13 +36,7 @@ class SqlRunController extends Controller {
     }
 
     getQuery() {
-        if (this.hasMonacoOutlet) {
-            return this.monacoOutlet.getValue();
-        } else if (this.hasSimpleEditorOutlet) {
-            return this.simpleEditorOutlet.getValue();
-        } else {
-            throw new Error('No editor outlet found');
-        }
+        return this.editorOutlet.getValue();
     }
 
     async execute(e) {
