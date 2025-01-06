@@ -143,6 +143,10 @@ html {
     margin-bottom: 1rem;
 }
 
+.panel__text p {
+    margin: 1rem 0;
+}
+
 .table-info {
     background-color: #0f172a;
     border-radius: 0.5rem;

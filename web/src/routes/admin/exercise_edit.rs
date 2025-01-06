@@ -141,7 +141,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
             }
 
             div class="form__actions" {
-                a href="/admin/exercise/" {
+                a href="/" {
                     button class="button button--secondary" {
                         "Cancel"
                     }
