@@ -50,6 +50,7 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
             // FIXME: dynamically set this to the app host
             "*.utterstep.app",
             "*.frontendapi.corbado.io",
+            "esm.sh",
             "cdn.jsdelivr.net",
         ])
         .default_src(vec!["'self'"])

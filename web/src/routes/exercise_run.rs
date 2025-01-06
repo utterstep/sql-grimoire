@@ -196,7 +196,7 @@ pub async fn run(
                                 }
                                 pre class="expected-query__code" {
                                     code
-                                        class="language-pgsql"
+                                        class="language-sql"
                                         data-highlight-target="code"
                                     {
                                         (exercise.expected_query())

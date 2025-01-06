@@ -38,12 +38,13 @@ class EditorController extends Controller {
         waitUntilReady
             .then(ready)
             .then(() => {
-                let value = this.editorTarget.textContent;
+                const value = this.editorTarget.textContent;
                 this.editorTarget.textContent = '';
 
                 this.editor = monaco.editor.create(this.editorTarget, {
                     language: this.editorTarget.dataset.language,
                     theme: 'vs-dark',
+                    fontSize: 14,
                     value,
                     minimap: { enabled: false },
                 });

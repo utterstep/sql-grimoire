@@ -190,9 +190,14 @@ html {
     color: #cbd5e1;
     overflow: auto;
 
+    max-width: calc(48rem - 3.15rem);
     max-height: 20rem;
 
     margin: 0;
+    padding: 0 1rem;
+
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
 }
 
 .editor__header {
@@ -249,14 +254,12 @@ html {
 
 .editor__textarea {
     width: 100%;
-    height: 12rem;
+    height: 16rem;
     background-color: #0f172a;
     color: #f1f5f9;
-    padding: 0 1rem;
     border-radius: 0.5rem;
     font-family: monospace;
     font-size: 0.875rem;
-    resize: none;
     border: none;
     margin-bottom: 1rem;
 }
@@ -670,4 +673,28 @@ html {
 .schema-sidebar__body {
     padding: 1rem;
     overflow: auto;
+}
+
+.sql-hl-keyword {
+    color: #569cd6;
+}
+
+.sql-hl-function {
+    color: #dcdcaa;
+}
+
+.sql-hl-number {
+    color: #b5cea8;
+}
+
+.sql-hl-string {
+    color: #ce9178;
+}
+
+.sql-hl-special {
+    color: #c586c0;
+}
+
+.sql-hl-bracket {
+    color: #ffd700;
 }

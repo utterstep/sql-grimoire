@@ -55,11 +55,18 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
                         data-action="schema-hidden#fetchSchema"
                     {
                         @for schema in schemas {
-                            option
-                                value=(schema.id())
-                                selected=(exercise.map(|ex| ex.schema_id() == schema.id()).unwrap_or(false))
-                            {
-                                (schema.name())
+                            // FIXME: idk how to add empty attribute in maud conditionally.
+                            // selected=(exercise.map(|ex| ex.schema_id() == schema.id()).unwrap_or(false))
+                            // – doesn't work
+                            @if exercise.map(|ex| ex.schema_id() == schema.id()).unwrap_or(false) {
+                                option
+                                    value=(schema.id())
+                                    selected
+                                {
+                                    (schema.name())
+                                }
+                            } @else {
+                                option value=(schema.id()) { (schema.name()) }
                             }
                         }
                     }
