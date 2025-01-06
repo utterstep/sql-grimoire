@@ -1,5 +1,5 @@
 import { Controller } from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
-import { PGlite } from 'https://cdn.jsdelivr.net/npm/@electric-sql/pglite/dist/index.js';
+import { PGlite } from 'https://cdn.jsdelivr.net/npm/@electric-sql/pglite@0.2.15/dist/index.js';
 
 export default class DbController extends Controller {
     static targets = ['schema'];
@@ -21,7 +21,7 @@ export default class DbController extends Controller {
         await this.resetDb(schema);
     }
 
-    async resetDbRequest(e) {
+    async resetDbRequest() {
         const schema = this.getSchema();
 
         if (!schema) {

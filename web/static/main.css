@@ -147,6 +147,15 @@ html {
     margin: 1rem 0;
 }
 
+.panel__text code {
+    background-color: #1e1815;
+    color: #ff9e64;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.2rem;
+    font-family: ui-monospace, monospace;
+    text-shadow: 0 0 8px rgba(255, 158, 100, 0.3);
+}
+
 .table-info {
     background-color: #0f172a;
     border-radius: 0.5rem;
