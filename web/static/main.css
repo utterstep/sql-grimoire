@@ -634,19 +634,47 @@ html {
     height: 100vh;
     background-color: #1e293b;
     border-left: 1px solid #334155;
-    transition: right 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    transition-property: right, width;
     z-index: 49;
 }
 
 /* Show sidebar when checkbox is checked */
 .schema-toggle:checked~.schema-sidebar {
     right: 0;
+    transition-property: right;
 }
 
-/* Hide button when sidebar is visible */
-.schema-toggle:checked~.schema-button {
-    opacity: 0;
-    visibility: hidden;
+
+.schema-sidebar__draghandle {
+    position: absolute;
+    width: 1rem;
+    height: 2rem;
+    background-color: #1e293b;
+    z-index: 50;
+    left: -1rem;
+    top: 1rem;
+    border: 1px solid #334155;
+    display: none; /* hiding by default */
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px 0 0 2px;
+
+    cursor: grab;
+    user-select: none;
+}
+
+/* Show sidebar handle when checkbox is checked */
+.schema-toggle:checked~.schema-sidebar > .schema-sidebar__draghandle {
+    display: flex;
+}
+
+.schema-sidebar__draghandle::after {
+    content: '⠿';
+}
+
+.schema-sidebar__draghandle:active {
+    cursor: grabbing;
 }
 
 .schema-sidebar__content {

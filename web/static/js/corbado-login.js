@@ -15,10 +15,10 @@
     waitUntilReady
         .then(ready)
         .then(() => {
-            const authElement = document.getElementById("corbado-auth");
+            const authElement = document.getElementById('corbado-auth');
             Corbado.mountAuthUI(authElement, {
                 onLoggedIn: () => {
-                    Turbo.visit("/auth/callback/");
+                    Turbo.visit('/auth/callback/');
                 },
             });
         });

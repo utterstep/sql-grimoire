@@ -7,7 +7,7 @@ mermaid.initialize({
     theme: 'dark',
 });
 
-export default class MermaidSchemaVisController extends Controller {
+class MermaidSchemaVisController extends Controller {
     static targets = ['schemaVis'];
     static outlets = ['db'];
 
@@ -111,7 +111,9 @@ export default class MermaidSchemaVisController extends Controller {
     }
 
     async getRelationships(db, schema = 'public') {
-        const relationships = await db.query(this.getRelationshipsQuery(schema));
+        const relationships = await db.query(
+            this.getRelationshipsQuery(schema),
+        );
 
         return relationships.rows;
     }
@@ -183,12 +185,9 @@ export default class MermaidSchemaVisController extends Controller {
         }
 
         return mermaid.join('\n');
-    };
+    }
 
-    generateDiagram({
-        entities = [],
-        relationships = []
-    }) {
+    generateDiagram({ entities = [], relationships = [] }) {
         const diagram = ['erDiagram'];
 
         if (entities.length > 0) {
@@ -203,7 +202,11 @@ export default class MermaidSchemaVisController extends Controller {
     }
 
     async drawSchema(e) {
-        const { entities, relationships, indexes: _indexes } = await this.getDbData(this.dbOutlet.db);
+        const {
+            entities,
+            relationships,
+            indexes: _indexes,
+        } = await this.getDbData(this.dbOutlet.db);
         const diagram = this.generateDiagram({ entities, relationships });
 
         // insert a single child element into the schemaVisTarget
@@ -223,7 +226,10 @@ export default class MermaidSchemaVisController extends Controller {
             maxScale: 3,
             step: 0.1,
         });
-        this.schemaVisTarget.parentElement.addEventListener('wheel', this.panzoom.zoomWithWheel)
+        this.schemaVisTarget.parentElement.addEventListener(
+            'wheel',
+            this.panzoom.zoomWithWheel,
+        );
     }
 
     disconnect() {

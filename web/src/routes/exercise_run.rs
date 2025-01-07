@@ -123,11 +123,15 @@ pub async fn run(
                         div class="editor__header" {
                             h3 class="editor__title" { "Query Editor" }
 
-                            div class="editor__actions" {
+                            div
+                                class="editor__actions"
+                                data-controller="drag-resize"
+                            {
                                 input
                                     type="checkbox"
                                     id="schema-toggle"
                                     class="schema-toggle"
+                                    data-action="drag-resize#resetWidth"
                                 {}
 
                                 label
@@ -138,7 +142,14 @@ pub async fn run(
                                     span { "Show Schema" }
                                 }
 
-                                div class="schema-sidebar" {
+                                div
+                                    data-drag-resize-target="resizable"
+                                    class="schema-sidebar"
+                                {
+                                    div
+                                        class="schema-sidebar__draghandle"
+                                        data-drag-resize-target="handle" {}
+
                                     div class="schema-sidebar__content" {
                                         div class="schema-sidebar__header" {
                                             h2 class="schema-sidebar__title" { (schema.name()) }
@@ -224,6 +235,7 @@ pub async fn run(
 
             script type="module" src={"/static/" (static_files::db_controller.name)} {}
             script type="module" src={"/static/" (static_files::mermaid_schema_vis_controller.name)} {}
+            script type="module" src={"/static/" (static_files::drag_resize_controller.name)} {}
 
             script defer type="module" src={"/static/" (static_files::monaco_init.name)} {}
             script defer type="module" src={"/static/" (static_files::editor_controller.name)} {}

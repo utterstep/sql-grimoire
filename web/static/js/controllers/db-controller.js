@@ -1,7 +1,7 @@
 import { Controller } from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
 import { PGlite } from 'https://cdn.jsdelivr.net/npm/@electric-sql/pglite@0.2.15/dist/index.js';
 
-export default class DbController extends Controller {
+class DbController extends Controller {
     static targets = ['schema'];
 
     async connect() {
@@ -14,10 +14,17 @@ export default class DbController extends Controller {
 
     getSchema() {
         // check the value first (bc textarea has both value and textContent)
-        return this.hasSchemaTarget && (this.schemaTarget.value || this.schemaTarget.textContent);
+        return (
+            this.hasSchemaTarget &&
+            (this.schemaTarget.value || this.schemaTarget.textContent)
+        );
     }
 
-    async schemaUpdated({ detail: { schema: { schema } } }) {
+    async schemaUpdated({
+        detail: {
+            schema: { schema },
+        },
+    }) {
         await this.resetDb(schema);
     }
 

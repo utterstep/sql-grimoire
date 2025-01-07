@@ -36,6 +36,11 @@ static_files!(
         mime::TEXT_JAVASCRIPT
     ),
     (
+        drag_resize_controller,
+        "../static/js/controllers/drag-resize-controller.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    (
         editor_controller,
         "../static/js/controllers/editor-controller.js",
         mime::TEXT_JAVASCRIPT

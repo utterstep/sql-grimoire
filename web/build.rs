@@ -17,6 +17,10 @@ fn main() {
         "db_controller_HASH",
     );
     process_file(
+        "static/js/controllers/drag-resize-controller.js",
+        "drag_resize_controller_HASH",
+    );
+    process_file(
         "static/js/controllers/editor-controller.js",
         "editor_controller_HASH",
     );
