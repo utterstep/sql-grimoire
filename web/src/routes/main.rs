@@ -31,11 +31,9 @@ pub async fn main_page(
             div class="exercises__header" {
                 h1 class="exercises__title" { "SQL Exercises" }
                 @if user.is_admin() {
-                    a href="/admin/exercise/new/" {
-                        button class="button button--primary" {
-                            i data-lucide="plus" class="button__icon" {}
-                            "New Exercise"
-                        }
+                    a href="/admin/exercise/new/" class="button button--primary" {
+                        i data-lucide="plus" class="button__icon" {}
+                        "New Exercise"
                     }
                 }
             }
@@ -67,10 +65,8 @@ pub async fn main_page(
                                 }
                                 @if user.is_admin() {
                                     td class="exercises-table__cell exercises-table__cell--actions" {
-                                        a href=(format!("/admin/exercise/{}/", exercise.id())) {
-                                            button class="icon-button" {
-                                                i data-lucide="edit" class="icon-button__icon" {}
-                                            }
+                                        a href=(format!("/admin/exercise/{}/", exercise.id())) class="icon-button" {
+                                            i data-lucide="edit" class="icon-button__icon" {}
                                         }
                                     }
                                 }

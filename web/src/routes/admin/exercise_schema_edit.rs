@@ -75,10 +75,8 @@ fn exercise_schema_form(exercise_schema: Option<ExerciseSchema>) -> maud::Markup
             }
 
             div class="form__actions" {
-                a href="/admin/exercise/schemas/" {
-                    button class="button button--secondary" {
-                        "Cancel"
-                    }
+                a href="/admin/exercise/schemas/" class="button button--secondary" {
+                    "Cancel"
                 }
                 button
                     data-action="db#resetDbRequest:prevent"
@@ -130,11 +128,9 @@ pub async fn exercise_schema_edit(
     let inner = app_layout(
         html! {
             div class="content__header" {
-                a href="/admin/exercise/schemas/" {
-                    button class="button button--text" {
-                        i data-lucide="chevron-left" class="button__icon" {}
-                        "Back to Schemas"
-                    }
+                a href="/admin/exercise/schemas/" class="button button--text" {
+                    i data-lucide="chevron-left" class="button__icon" {}
+                    "Back to Schemas"
                 }
             }
             (form)
@@ -156,11 +152,9 @@ pub async fn exercise_schema_new(
     let inner = app_layout(
         html! {
             div class="content__header" {
-                a href="/admin/exercise/schemas/" {
-                    button class="button button--text" {
-                        i data-lucide="chevron-left" class="button__icon" {}
-                        "Back to Schemas"
-                    }
+                a href="/admin/exercise/schemas/" class="button button--text" {
+                    i data-lucide="chevron-left" class="button__icon" {}
+                    "Back to Schemas"
                 }
             }
             (form)

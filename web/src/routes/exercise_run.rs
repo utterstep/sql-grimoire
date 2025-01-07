@@ -66,11 +66,9 @@ pub async fn run(
     let inner = app_layout(
         html! {
             div class="content__header" {
-                a href="/" {
-                    button class="button button--text" {
-                        i data-lucide="chevron-left" class="button__icon" {}
-                        "Back to Exercises"
-                    }
+                a href="/" class="button button--text" {
+                    i data-lucide="chevron-left" class="button__icon" {}
+                    "Back to Exercises"
                 }
             }
             turbo-frame

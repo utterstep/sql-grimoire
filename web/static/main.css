@@ -217,6 +217,8 @@ html {
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: 500;
+
+    text-decoration: none;
 }
 
 .button--primary {
@@ -460,6 +462,8 @@ html {
     cursor: pointer;
     padding: 0.5rem;
     margin-left: 0.5rem;
+
+    display: inline-block;
 }
 
 .icon-button:hover {

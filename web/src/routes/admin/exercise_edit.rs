@@ -1,18 +1,19 @@
 use axum::{
     debug_handler,
-    extract::{Form, Path, State},
+    extract::{Form, Path, Query, State},
     http,
     response::{IntoResponse, Redirect},
 };
 use axum_extra::extract::Cached;
 use eyre::WrapErr;
 use maud::{html, Markup};
+use serde::Deserialize;
 
 use crate::{
     db::exercise,
     error::Result,
     models::{
-        exercise::{Exercise, ExerciseId, ExerciseSchemaListItem, NewExercise},
+        exercise::{Exercise, ExerciseId, ExerciseSchemaId, ExerciseSchemaListItem, NewExercise},
         user::User,
     },
     partials::{app_layout, page},
@@ -20,11 +21,22 @@ use crate::{
     static_files,
 };
 
-fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]) -> Markup {
+#[derive(Debug, Deserialize)]
+pub struct NewExerciseQuery {
+    schema_id: Option<ExerciseSchemaId>,
+}
+
+fn exercise_form(
+    exercise: Option<&Exercise>,
+    schemas: &[ExerciseSchemaListItem],
+    schema_preselected: Option<ExerciseSchemaId>,
+) -> Markup {
     let title = match exercise {
-        Some(exercise) => format!("Edit Exercise \"{}\"", exercise.name()),
+        Some(exercise) => format!("Editing Exercise \"{}\"", exercise.name()),
         None => "New Exercise".to_string(),
     };
+
+    let selected_schema_id = exercise.map(|e| *e.schema_id()).or(schema_preselected);
 
     let submit_text = if exercise.is_some() {
         "Update Exercise"
@@ -58,7 +70,7 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
                             // FIXME: idk how to add empty attribute in maud conditionally.
                             // selected=(exercise.map(|ex| ex.schema_id() == schema.id()).unwrap_or(false))
                             // – doesn't work
-                            @if exercise.map(|ex| ex.schema_id() == schema.id()).unwrap_or(false) {
+                            @if selected_schema_id.map(|id| &id == schema.id()).unwrap_or(false) {
                                 option
                                     value=(schema.id())
                                     selected
@@ -148,9 +160,18 @@ fn exercise_form(exercise: Option<&Exercise>, schemas: &[ExerciseSchemaListItem]
             }
 
             div class="form__actions" {
-                a href="/" {
-                    button class="button button--secondary" {
-                        "Cancel"
+                a
+                    class="button button--secondary"
+                    href="/"
+                {
+                    "Cancel"
+                }
+                @if let Some(ex) = exercise {
+                    a
+                        class="button button--secondary"
+                        href={"/admin/exercise/new/?schema_id=" (ex.schema_id())}
+                    {
+                        "Create new"
                     }
                 }
                 input
@@ -192,16 +213,14 @@ pub async fn exercise_edit(
         .await
         .wrap_err("Failed to query exercise schemas")?;
 
-    let form = exercise_form(Some(&exercise), &schemas);
+    let form = exercise_form(Some(&exercise), &schemas, None);
 
     let inner = app_layout(
         html! {
             div class="content__header" {
-                a href="/" {
-                    button class="button button--text" {
-                        i data-lucide="chevron-left" class="button__icon" {}
-                        "Back to Exercises"
-                    }
+                a class="button button--text" href="/" {
+                    i data-lucide="chevron-left" class="button__icon" {}
+                    "Back to Exercises"
                 }
             }
             (form)
@@ -217,6 +236,7 @@ pub async fn exercise_edit(
 #[tracing::instrument(skip_all)]
 pub async fn exercise_new(
     State(state): State<AppState>,
+    Query(schema_preselected): Query<NewExerciseQuery>,
     Cached(user): Cached<User>,
 ) -> Result<impl IntoResponse> {
     let mut conn = state
@@ -229,16 +249,14 @@ pub async fn exercise_new(
         .await
         .wrap_err("Failed to query exercise schemas")?;
 
-    let form = exercise_form(None, &schemas);
+    let form = exercise_form(None, &schemas, schema_preselected.schema_id);
 
     let inner = app_layout(
         html! {
             div class="content__header" {
-                a href="/" {
-                    button class="button button--text" {
-                        i data-lucide="chevron-left" class="button__icon" {}
-                        "Back to Exercises"
-                    }
+                a href="/" class="button button--text" {
+                    i data-lucide="chevron-left" class="button__icon" {}
+                    "Back to Exercises"
                 }
             }
             (form)

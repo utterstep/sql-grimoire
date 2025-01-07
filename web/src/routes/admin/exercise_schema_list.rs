@@ -31,11 +31,9 @@ pub async fn exercise_schema_list(
         div class="content" {
             div class="content__header" {
                 h1 class="content__title" { "Database Schemas" }
-                a href="/admin/exercise/schemas/new/" {
-                    button class="button button--primary" {
-                        i data-lucide="plus" class="button__icon" {}
-                        "New Schema"
-                    }
+                a href="/admin/exercise/schemas/new/" class="button button--primary" {
+                    i data-lucide="plus" class="button__icon" {}
+                    "New Schema"
                 }
             }
             div class="table-container" {
