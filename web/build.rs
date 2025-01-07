@@ -21,10 +21,6 @@ fn main() {
         "editor_controller_HASH",
     );
     process_file(
-        "static/js/controllers/highlight-controller.js",
-        "highlight_controller_HASH",
-    );
-    process_file(
         "static/js/controllers/mermaid-schema-vis-controller.js",
         "mermaid_schema_vis_controller_HASH",
     );
@@ -35,6 +31,10 @@ fn main() {
     process_file(
         "static/js/controllers/solution-submit-controller.js",
         "solution_submit_controller_HASH",
+    );
+    process_file(
+        "static/js/controllers/sql-highlight-controller.js",
+        "sql_highlight_controller_HASH",
     );
     process_file(
         "static/js/controllers/sql-run-controller.js",

@@ -220,7 +220,7 @@ export default class MermaidSchemaVisController extends Controller {
 
         this.panzoom = Panzoom(this.schemaVisTarget, {
             minScale: 1,
-            maxScale: 2.5,
+            maxScale: 3,
             step: 0.1,
         });
         this.schemaVisTarget.parentElement.addEventListener('wheel', this.panzoom.zoomWithWheel)

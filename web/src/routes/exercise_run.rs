@@ -75,7 +75,7 @@ pub async fn run(
             }
             turbo-frame
                 #db
-                data-controller="sql-run solution-submit highlight db mermaid-schema-vis"
+                data-controller="sql-run solution-submit sql-highlight db mermaid-schema-vis"
                 data-action="db:db-created->mermaid-schema-vis#drawSchema"
                 data-sql-run-editor-outlet="#editor"
                 data-sql-run-db-outlet="#db"
@@ -83,6 +83,8 @@ pub async fn run(
                 data-solution-submit-db-outlet="#db"
                 data-mermaid-schema-vis-db-outlet="#db"
             {
+                script type="module" src={"/static/" (static_files::sql_highlight_controller.name)} {}
+
                 div class="grid" {
                     div class="panel panel--exercise" {
                         h2 class="panel__title" { (exercise.name()) }
@@ -98,15 +100,18 @@ pub async fn run(
                                     pre class="table-info__schema" {
                                         code
                                             class="language-pgsql"
-                                            data-highlight-target="code"
-                                            data-db-target="schema"
+                                            data-sql-highlight-target="code"
                                         {
                                             (schema.schema())
                                         }
                                     }
+                                    code
+                                        class="hidden"
+                                        data-db-target="schema"
+                                    {
+                                        (schema.schema())
+                                    }
                                 }
-
-                                script type="module" src={"/static/" (static_files::highlight_controller.name)} {}
                             }
                         }
                     }
@@ -197,7 +202,7 @@ pub async fn run(
                                 pre class="expected-query__code" {
                                     code
                                         class="language-sql"
-                                        data-highlight-target="code"
+                                        data-sql-highlight-target="code"
                                     {
                                         (exercise.expected_query())
                                     }

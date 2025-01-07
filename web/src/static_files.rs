@@ -41,11 +41,6 @@ static_files!(
         mime::TEXT_JAVASCRIPT
     ),
     (
-        highlight_controller,
-        "../static/js/controllers/highlight-controller.js",
-        mime::TEXT_JAVASCRIPT
-    ),
-    (
         mermaid_schema_vis_controller,
         "../static/js/controllers/mermaid-schema-vis-controller.js",
         mime::TEXT_JAVASCRIPT
@@ -58,6 +53,11 @@ static_files!(
     (
         solution_submit_controller,
         "../static/js/controllers/solution-submit-controller.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    (
+        sql_highlight_controller,
+        "../static/js/controllers/sql-highlight-controller.js",
         mime::TEXT_JAVASCRIPT
     ),
     (
