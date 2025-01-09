@@ -118,7 +118,7 @@ pub async fn run(
                         #editor
                         class="panel panel--editor"
                         data-controller="editor"
-                        data-editor-mode-value="monaco"
+                        data-editor-mode-value="codemirror"
                     {
                         div class="editor__header" {
                             h3 class="editor__title" { "Query Editor" }

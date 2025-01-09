@@ -1,4 +1,4 @@
-use maud::{html, Markup, DOCTYPE};
+use maud::{html, Markup, PreEscaped, DOCTYPE};
 
 use crate::static_files;
 
@@ -33,6 +33,21 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
             title { (page_title) }
             link rel="stylesheet" href={"/static/" (static_files::reset_css.name)};
             link rel="stylesheet" href={"/static/" (static_files::main_css.name)};
+
+            // importmap for codemirror
+            script type="importmap" {
+                (PreEscaped(r#"{
+                    "imports": {
+                        "style-mod": "https://esm.sh/style-mod",
+                        "w3c-keyname": "https://esm.sh/w3c-keyname",
+                        "crelt": "https://esm.sh/crelt",
+                        "@marijn/find-cluster-break": "https://esm.sh/@marijn/find-cluster-break",
+                        "@lezer/": "https://esm.sh/*@lezer/",
+                        "@codemirror/": "https://esm.sh/*@codemirror/",
+                        "codemirror": "https://esm.sh/*codemirror"
+                    }
+                }"#))
+            }
 
             // Turbo
             script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.11/+esm" {}

@@ -60,6 +60,7 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
             "esm.sh",
             "unpkg.com",
             "'unsafe-eval'",
+            "'unsafe-inline'",
         ])
         // FIXME: remove unsafe-inline
         .style_src(vec![
