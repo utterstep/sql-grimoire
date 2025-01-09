@@ -6,7 +6,7 @@ authors = [
 edition = "2021"
 
 [workspace]
-resolver = "2"
+resolver = "3"
 members = [
     "id",
     "observability",
@@ -24,3 +24,5 @@ tracing = "0.1.41"
 uuid = { version = "1.11.0", features = ["serde", "v7"] }
 url = { version = "2.5.4", features = ["serde"] }
 
+[workspace.lints.clippy]
+unwrap_used = "deny"
