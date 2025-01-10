@@ -16,7 +16,7 @@ class EditorController extends Controller {
         }
     }
 
-    applyDbInfo({ detail: { dbInfo } }) {
+    initSchemaSuggestions({ detail: { dbInfo } }) {
         const tables = [...new Set(dbInfo.entities.map(entity => entity.name))];
         const columns = [...new Set(dbInfo.entities.flatMap(entity => entity.attributes.map(attribute => attribute.name)))];
 
