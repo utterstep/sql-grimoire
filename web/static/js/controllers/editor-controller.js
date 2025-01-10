@@ -62,7 +62,6 @@ class EditorController extends Controller {
             'RANGE BETWEEN',
             'UNBOUNDED',
             'PRECEDING',
-            'FOLLOWING',
             'CURRENT ROW',
             'EXCLUDE',
             'CURRENT ROW',
