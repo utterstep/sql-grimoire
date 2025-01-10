@@ -1,4 +1,5 @@
 import { Controller } from 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm';
+import { SQLAutocomplete, SQLDialect } from 'https://esm.sh/sql-autocomplete@1.1.1?bundle-deps';
 
 class EditorController extends Controller {
     static targets = ['editor'];
@@ -16,28 +17,41 @@ class EditorController extends Controller {
         }
     }
 
-    initSchemaSuggestions({ detail: { dbInfo } }) {
-        const tables = [...new Set(dbInfo.entities.map(entity => entity.name))];
-        const columns = [...new Set(dbInfo.entities.flatMap(entity => entity.attributes.map(attribute => attribute.name)))];
+    provideCompletionItems(model, position) {
+        const word = model.getWordUntilPosition(position);
+        const range = {
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: word.startColumn,
+            endColumn: word.endColumn,
+        };
 
-        this.createFieldsProposals = (range) => {
-            return tables.map(table => ({
-                label: table,
-                insertText: table,
-                kind: monaco.languages.CompletionItemKind.Class,
+        const line = model.getLineContent(position.lineNumber);
+        const index = position.column;
+
+        const suggestions = this.sqlAutocomplete.autocomplete(line, index);
+
+        const optionTypeMap = {
+            'TABLE': monaco.languages.CompletionItemKind.Class,
+            'COLUMN': monaco.languages.CompletionItemKind.Field,
+            'KEYWORD': monaco.languages.CompletionItemKind.Keyword,
+        }
+
+        return {
+            suggestions: suggestions.filter(suggestion => !!suggestion.value).map(suggestion => ({
+                label: suggestion.value,
+                insertText: suggestion.value,
+                kind: optionTypeMap[suggestion.optionType],
                 range,
-            })).concat(columns.map(column => ({
-                label: column,
-                insertText: column,
-                kind: monaco.languages.CompletionItemKind.Field,
-                range,
-            })));
+            })),
         }
     }
 
-    initSimple() {
-        // For simple mode, we don't need to do anything special
-        // The textarea is ready to use as-is
+    initSchemaSuggestions({ detail: { dbInfo } }) {
+        this.tables = [...new Set(dbInfo.entities.map(entity => entity.name))];
+        this.columns = [...new Set(dbInfo.entities.flatMap(entity => entity.attributes.map(attribute => attribute.name)))];
+
+        this.sqlAutocomplete = new SQLAutocomplete(SQLDialect.PLpgSQL, this.tables, this.columns);
     }
 
     initMonaco() {
@@ -60,22 +74,12 @@ class EditorController extends Controller {
                 const value = this.editorTarget.textContent;
                 this.editorTarget.textContent = '';
 
-                const provideCompletionItems = (model, position) => {
-                    const word = model.getWordUntilPosition(position);
-                    const range = {
-                        startLineNumber: position.lineNumber,
-                        endLineNumber: position.lineNumber,
-                        startColumn: word.startColumn,
-                        endColumn: word.endColumn,
-                    };
-
-                    return {
-                        suggestions: this.createFieldsProposals(range),
-                    };
+                if (!this.sqlAutocomplete) {
+                    this.sqlAutocomplete = new SQLAutocomplete(SQLDialect.PLpgSQL);
                 }
 
                 monaco.languages.registerCompletionItemProvider("pgsql", {
-                    provideCompletionItems: provideCompletionItems.bind(this),
+                    provideCompletionItems: this.provideCompletionItems.bind(this),
                 });
 
                 this.editor = monaco.editor.create(this.editorTarget, {
