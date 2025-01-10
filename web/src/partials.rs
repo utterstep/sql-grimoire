@@ -81,7 +81,7 @@ pub fn app_layout(content: Markup, title: &str, is_admin: bool) -> Markup {
                 }
             }
 
-            main class="main" {
+            main class="main-container" {
                 (content)
             }
         }

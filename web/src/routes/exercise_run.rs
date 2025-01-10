@@ -73,13 +73,12 @@ pub async fn run(
             }
             turbo-frame
                 #db
-                data-controller="sql-run solution-submit sql-highlight db mermaid-schema-vis"
+                data-controller="sql-run solution-submit sql-highlight mermaid-schema-vis db"
                 data-action="db:db-created->mermaid-schema-vis#drawSchema"
                 data-sql-run-editor-outlet="#editor"
                 data-sql-run-db-outlet="#db"
                 data-solution-submit-editor-outlet="#editor"
                 data-solution-submit-db-outlet="#db"
-                data-mermaid-schema-vis-db-outlet="#db"
             {
                 script type="module" src={"/static/" (static_files::sql_highlight_controller.name)} {}
 
@@ -117,6 +116,7 @@ pub async fn run(
                     div
                         #editor
                         class="panel panel--editor"
+                        data-action="db:db-created@window->editor#initSchemaSuggestions"
                         data-controller="editor"
                         data-editor-mode-value="monaco"
                     {
