@@ -116,7 +116,7 @@ pub async fn run(
                     div
                         #editor
                         class="panel panel--editor"
-                        data-action="db:db-created@window->editor#initSchemaSuggestions"
+                        data-action="db:db-created@window->editor#updateSchemaSuggestions"
                         data-controller="editor"
                         data-editor-mode-value="monaco"
                     {

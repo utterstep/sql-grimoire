@@ -7,6 +7,9 @@ class EditorController extends Controller {
     }
 
     connect() {
+        this.tables = [];
+        this.columns = [];
+
         if (this.modeValue === 'monaco') {
             this.initMonaco();
         } else if (this.modeValue === 'simple') {
@@ -16,23 +19,91 @@ class EditorController extends Controller {
         }
     }
 
-    initSchemaSuggestions({ detail: { dbInfo } }) {
-        const tables = [...new Set(dbInfo.entities.map(entity => entity.name))];
-        const columns = [...new Set(dbInfo.entities.flatMap(entity => entity.attributes.map(attribute => attribute.name)))];
+    provideCompletionItems = (model, position) => {
+        // suggest read-only keywords
+        const KEYWORDS = [
+            'SELECT',
+            'FROM',
+            'WHERE',
+            'GROUP BY',
+            'ORDER BY',
+            'LIMIT',
+            'OFFSET',
+            'HAVING',
+            'UNION',
+            'EXCEPT',
+            'AS',
+            'JOIN',
+            'ON',
+            'BETWEEN',
+            'IN',
+            'LIKE',
+            'ILIKE',
+            'IS',
+            'IS NOT',
+            'IS NULL',
+            'IS NOT NULL',
+            'AND',
+            'OR',
+            'NOT',
+            // window functions and keywords
+            'COUNT',
+            'SUM',
+            'AVG',
+            'MIN',
+            'MAX',
+            'ROW_NUMBER',
+            'RANK',
+            'OVER',
+            'PARTITION',
+            'ROWS',
+            'RANGE',
+            'ROWS BETWEEN',
+            'RANGE BETWEEN',
+            'UNBOUNDED',
+            'PRECEDING',
+            'FOLLOWING',
+            'CURRENT ROW',
+            'EXCLUDE',
+            'CURRENT ROW',
+            'GROUP',
+            'CUME_DIST',
+            'PERCENT_RANK',
+        ];
 
-        this.createFieldsProposals = (range) => {
-            return tables.map(table => ({
-                label: table,
-                insertText: table,
-                kind: monaco.languages.CompletionItemKind.Class,
-                range,
-            })).concat(columns.map(column => ({
-                label: column,
-                insertText: column,
-                kind: monaco.languages.CompletionItemKind.Field,
-                range,
-            })));
-        }
+        const word = model.getWordUntilPosition(position);
+        const range = {
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: word.startColumn,
+            endColumn: word.endColumn,
+        };
+
+        const suggestions = this.tables.map(table => ({
+            label: table,
+            insertText: table,
+            kind: monaco.languages.CompletionItemKind.Class,
+            range,
+        })).concat(this.columns.map(column => ({
+            label: column,
+            insertText: column,
+            kind: monaco.languages.CompletionItemKind.Field,
+            range,
+        }))).concat(KEYWORDS.map(keyword => ({
+            label: keyword,
+            insertText: keyword,
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            range,
+        })));
+
+        return {
+            suggestions,
+        };
+    }
+
+    updateSchemaSuggestions({ detail: { dbInfo } }) {
+        this.tables = [...new Set(dbInfo.entities.map(entity => entity.name))];
+        this.columns = [...new Set(dbInfo.entities.flatMap(entity => entity.attributes.map(attribute => attribute.name)))];
     }
 
     initSimple() {
@@ -60,22 +131,8 @@ class EditorController extends Controller {
                 const value = this.editorTarget.textContent;
                 this.editorTarget.textContent = '';
 
-                const provideCompletionItems = (model, position) => {
-                    const word = model.getWordUntilPosition(position);
-                    const range = {
-                        startLineNumber: position.lineNumber,
-                        endLineNumber: position.lineNumber,
-                        startColumn: word.startColumn,
-                        endColumn: word.endColumn,
-                    };
-
-                    return {
-                        suggestions: this.createFieldsProposals(range),
-                    };
-                }
-
                 monaco.languages.registerCompletionItemProvider("pgsql", {
-                    provideCompletionItems: provideCompletionItems.bind(this),
+                    provideCompletionItems: this.provideCompletionItems.bind(this),
                 });
 
                 this.editor = monaco.editor.create(this.editorTarget, {
