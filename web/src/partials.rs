@@ -46,6 +46,10 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
             script src="https://unpkg.com/@corbado/web-js@2/dist/bundle/index.js" {}
             script type="module" src={"/static/" (static_files::corbado_init.name)} {}
 
+            // Goatcounter
+            script type="module" src={"/static/" (static_files::goatcounter.name)} {}
+            script data-goatcounter="https://grimoire.goatcounter.com/count" async src="//gc.zgo.at/count.js" {}
+
             // Stimulus
             script type="module" src={"/static/" (static_files::stimulus_init.name)} {}
 

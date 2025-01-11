@@ -6,6 +6,7 @@ fn main() {
 
     process_file("static/js/corbado-init.js", "corbado_init_HASH");
     process_file("static/js/corbado-login.js", "corbado_login_HASH");
+    process_file("static/js/goatcounter.js", "goatcounter_HASH");
     process_file("static/js/lucide.js", "lucide_HASH");
     process_file("static/js/monaco-init.js", "monaco_init_HASH");
     process_file("static/js/monaco-loader.js", "monaco_loader_HASH");

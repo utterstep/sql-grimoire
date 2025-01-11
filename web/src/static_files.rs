@@ -13,6 +13,11 @@ static_files!(
         "../static/js/corbado-login.js",
         mime::TEXT_JAVASCRIPT
     ),
+    (
+        goatcounter,
+        "../static/js/goatcounter.js",
+        mime::TEXT_JAVASCRIPT
+    ),
     (lucide, "../static/js/lucide.js", mime::TEXT_JAVASCRIPT),
     (
         monaco_init,

@@ -50,6 +50,8 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
             // FIXME: dynamically set this to the app host
             "*.utterstep.app",
             "*.frontendapi.corbado.io",
+            // goatcounter
+            "https://grimoire.goatcounter.com/count",
             "esm.sh",
             "cdn.jsdelivr.net",
         ])
@@ -59,6 +61,7 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
             "cdn.jsdelivr.net",
             "esm.sh",
             "unpkg.com",
+            "gc.zgo.at",
             "'unsafe-eval'",
         ])
         // FIXME: remove unsafe-inline
