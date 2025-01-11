@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT INTO exercise\n                (schema_id, name, question, expected_query, expected_result)\n            VALUES\n                ($1, $2, $3, $4, $5)\n            RETURNING\n                id, schema_id, name, question, expected_query, expected_result",
+  "query": "UPDATE exercise\n            SET\n                name = $1,\n                question = $2,\n                expected_query = $3,\n                expected_result = $4,\n                published_at = $5\n            WHERE\n                id = $6\n            RETURNING\n                id, schema_id, name, question, expected_query, expected_result, published_at",
   "describe": {
     "columns": [
       {
@@ -32,15 +32,21 @@
         "ordinal": 5,
         "name": "expected_result",
         "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 6,
+        "name": "published_at",
+        "type_info": "Timestamptz"
       }
     ],
     "parameters": {
       "Left": [
-        "Uuid",
         "Text",
         "Text",
         "Text",
-        "Jsonb"
+        "Jsonb",
+        "Timestamptz",
+        "Uuid"
       ]
     },
     "nullable": [
@@ -49,8 +55,9 @@
       false,
       false,
       false,
-      false
+      false,
+      true
     ]
   },
-  "hash": "e8069a22e775bbafcf31639d6f32f31d17bfb782d9c995c733b4eb56d9bad698"
+  "hash": "1e9029638bf89bd35f1f0411724852ed1e6d71eee83efae8a30f8a84d778b412"
 }

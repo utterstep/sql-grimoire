@@ -92,10 +92,11 @@ pub async fn get_exercise_list(
 ) -> Result<Vec<ExerciseListItem>> {
     let exercises = sqlx::query_as!(
         ExerciseListItemInner,
-        "SELECT
+        r#"SELECT
             exercise.id,
             exercise.name,
-            'correct' = ANY(user_solution.status) AS solved
+            'correct' = ANY(user_solution.status) AS solved,
+            exercise.published_at IS NOT NULL AS "published!"
         FROM exercise
         LEFT OUTER JOIN (
             SELECT
@@ -107,7 +108,7 @@ pub async fn get_exercise_list(
             GROUP BY exercise_id
         ) AS user_solution ON exercise.id = user_solution.exercise_id
         ORDER BY exercise.name
-        ",
+        "#,
         user_id,
     )
     .fetch_all(conn)
@@ -121,7 +122,7 @@ pub async fn get_exercise_list(
 pub async fn get_exercise(conn: &mut PgConnection, id: ExerciseId) -> Result<Option<Exercise>> {
     let exercise = sqlx::query_as!(
         ExerciseInner,
-        "SELECT id, name, schema_id, question, expected_query, expected_result
+        "SELECT id, name, schema_id, question, expected_query, expected_result, published_at
         FROM exercise
         WHERE id = $1",
         id.get(),
@@ -144,7 +145,7 @@ pub async fn create_exercise(conn: &mut PgConnection, exercise: NewExercise) -> 
             VALUES
                 ($1, $2, $3, $4, $5)
             RETURNING
-                id, schema_id, name, question, expected_query, expected_result",
+                id, schema_id, name, question, expected_query, expected_result, published_at",
             exercise.schema_id.get(),
             exercise.name,
             exercise.question,
@@ -168,15 +169,17 @@ pub async fn update_exercise(conn: &mut PgConnection, exercise: Exercise) -> Res
                 name = $1,
                 question = $2,
                 expected_query = $3,
-                expected_result = $4
+                expected_result = $4,
+                published_at = $5
             WHERE
-                id = $5
+                id = $6
             RETURNING
-                id, schema_id, name, question, expected_query, expected_result",
+                id, schema_id, name, question, expected_query, expected_result, published_at",
             exercise.name(),
             exercise.question(),
             exercise.expected_query(),
             exercise.expected_result(),
+            *exercise.published_at(),
             exercise.id().get(),
         )
         .fetch_one(conn)

@@ -1,14 +1,3 @@
-use axum::{
-    debug_handler,
-    extract::{Form, Path, Query, State},
-    http,
-    response::{IntoResponse, Redirect},
-};
-use axum_extra::extract::Cached;
-use eyre::WrapErr;
-use maud::{html, Markup};
-use serde::Deserialize;
-
 use crate::{
     db::exercise,
     error::Result,
@@ -20,6 +9,17 @@ use crate::{
     state::AppState,
     static_files,
 };
+use axum::{
+    debug_handler,
+    extract::{Form, Path, Query, State},
+    http,
+    response::{IntoResponse, Redirect},
+};
+use axum_extra::extract::Cached;
+use eyre::WrapErr;
+use maud::{html, Markup};
+use serde::Deserialize;
+use time::OffsetDateTime;
 
 #[derive(Debug, Deserialize)]
 pub struct NewExerciseQuery {
@@ -44,6 +44,13 @@ fn exercise_form(
         "Create Exercise"
     };
 
+    let published_at = exercise
+        // either the already existing published_at
+        .map(|ex| *ex.published_at())
+        .flatten()
+        // or the current time
+        .unwrap_or_else(|| OffsetDateTime::now_utc());
+
     html! {
         form
             #db
@@ -67,19 +74,13 @@ fn exercise_form(
                         data-action="schema-hidden#fetchSchema"
                     {
                         @for schema in schemas {
-                            // FIXME: idk how to add empty attribute in maud conditionally.
-                            // selected=(exercise.map(|ex| ex.schema_id() == schema.id()).unwrap_or(false))
-                            // – doesn't work
-                            @if selected_schema_id.map(|id| &id == schema.id()).unwrap_or(false) {
-                                option
-                                    value=(schema.id())
-                                    selected
-                                {
-                                    (schema.name())
-                                }
-                            } @else {
-                                option value=(schema.id()) { (schema.name()) }
+                            option
+                                value=(schema.id())
+                                selected[selected_schema_id.map(|id| &id == schema.id()).unwrap_or(false)]
+                            {
+                                (schema.name())
                             }
+
                         }
                     }
                 }
@@ -113,6 +114,16 @@ fn exercise_form(
                         (exercise.map(|ex| ex.question().to_owned()).unwrap_or_default())
                     }
                 ;
+            }
+
+            div class="form__group" {
+                label class="form__label" { "Published" }
+                input
+                    type="checkbox"
+                    name="published_at"
+                    checked[exercise.map(|ex| ex.published_at().is_some()).unwrap_or(false)]
+                    value=(published_at)
+                {}
             }
 
             div class="form__group"

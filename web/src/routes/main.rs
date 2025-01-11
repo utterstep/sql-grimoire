@@ -24,7 +24,11 @@ pub async fn main_page(
         .await
         .wrap_err("Failed to start transaction")?;
 
-    let exercises = exercise::get_exercise_list(&mut txn, user.id()).await?;
+    let exercises = exercise::get_exercise_list(&mut txn, user.id())
+        .await
+        .wrap_err("Failed to get exercise list")?
+        .into_iter()
+        .filter(|ex| user.is_admin() || *ex.published());
 
     let inner = html! {
         div class="exercises" {
@@ -44,12 +48,13 @@ pub async fn main_page(
                             th class="exercises-table__header" { "Exercise" }
                             th class="exercises-table__header exercises-table__header--center" { "Status" }
                             @if user.is_admin() {
+                                th class="exercises-table__header exercises-table__header--center" { "Published" }
                                 th class="exercises-table__header exercises-table__header--actions" { "Actions" }
                             }
                         }
                     }
                     tbody {
-                        @for exercise in &exercises {
+                        @for exercise in exercises {
                             tr class="exercises-table__row" {
                                 td class="exercises-table__cell" {
                                     a href=(format!("/exercise/{}/", exercise.id())) class="exercise-link" {
@@ -64,6 +69,13 @@ pub async fn main_page(
                                     }
                                 }
                                 @if user.is_admin() {
+                                    td class="exercises-table__cell exercises-table__cell--center" {
+                                        @if *exercise.published() {
+                                            i data-lucide="check-circle-2" class="status-icon status-icon--completed" {}
+                                        } @else {
+                                            span class="status-icon status-icon--pending" { "○" }
+                                        }
+                                    }
                                     td class="exercises-table__cell exercises-table__cell--actions" {
                                         a href=(format!("/admin/exercise/{}/", exercise.id())) class="icon-button" {
                                             i data-lucide="edit" class="icon-button__icon" {}

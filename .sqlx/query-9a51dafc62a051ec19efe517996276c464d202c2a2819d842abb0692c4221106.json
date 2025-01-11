@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, name, schema_id, question, expected_query, expected_result\n        FROM exercise\n        WHERE id = $1",
+  "query": "SELECT id, name, schema_id, question, expected_query, expected_result, published_at\n        FROM exercise\n        WHERE id = $1",
   "describe": {
     "columns": [
       {
@@ -32,6 +32,11 @@
         "ordinal": 5,
         "name": "expected_result",
         "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 6,
+        "name": "published_at",
+        "type_info": "Timestamptz"
       }
     ],
     "parameters": {
@@ -45,8 +50,9 @@
       false,
       false,
       false,
-      false
+      false,
+      true
     ]
   },
-  "hash": "36bd87fee5867135fe737282dce25d142b24a7d800f6c442abc7a5dcbc0df118"
+  "hash": "9a51dafc62a051ec19efe517996276c464d202c2a2819d842abb0692c4221106"
 }
