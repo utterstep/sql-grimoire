@@ -61,7 +61,6 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
             "cdn.jsdelivr.net",
             "esm.sh",
             "unpkg.com",
-            "gc.zgo.at",
             "'unsafe-eval'",
         ])
         // FIXME: remove unsafe-inline

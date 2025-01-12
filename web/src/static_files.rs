@@ -13,11 +13,6 @@ static_files!(
         "../static/js/corbado-login.js",
         mime::TEXT_JAVASCRIPT
     ),
-    (
-        goatcounter,
-        "../static/js/goatcounter.js",
-        mime::TEXT_JAVASCRIPT
-    ),
     (lucide, "../static/js/lucide.js", mime::TEXT_JAVASCRIPT),
     (
         monaco_init,
@@ -73,6 +68,17 @@ static_files!(
     (
         sql_run_controller,
         "../static/js/controllers/sql-run-controller.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    // goatcounter
+    (
+        goatcounter_count,
+        "../static/js/goatcounter/count.js",
+        mime::TEXT_JAVASCRIPT
+    ),
+    (
+        goatcounter_init,
+        "../static/js/goatcounter/init.js",
         mime::TEXT_JAVASCRIPT
     ),
 );

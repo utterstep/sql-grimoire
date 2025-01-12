@@ -6,7 +6,6 @@ fn main() {
 
     process_file("static/js/corbado-init.js", "corbado_init_HASH");
     process_file("static/js/corbado-login.js", "corbado_login_HASH");
-    process_file("static/js/goatcounter.js", "goatcounter_HASH");
     process_file("static/js/lucide.js", "lucide_HASH");
     process_file("static/js/monaco-init.js", "monaco_init_HASH");
     process_file("static/js/monaco-loader.js", "monaco_loader_HASH");
@@ -45,4 +44,8 @@ fn main() {
         "static/js/controllers/sql-run-controller.js",
         "sql_run_controller_HASH",
     );
+
+    // goatcounter
+    process_file("static/js/goatcounter/count.js", "goatcounter_count_HASH");
+    process_file("static/js/goatcounter/init.js", "goatcounter_init_HASH");
 }

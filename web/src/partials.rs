@@ -47,8 +47,11 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
             script type="module" src={"/static/" (static_files::corbado_init.name)} {}
 
             // Goatcounter
-            script type="module" src={"/static/" (static_files::goatcounter.name)} {}
-            script data-goatcounter="https://grimoire.goatcounter.com/count" async src="//gc.zgo.at/count.js" {}
+            script src={"/static/" (static_files::goatcounter_init.name)} {}
+            script
+                data-goatcounter="https://grimoire.goatcounter.com/count"
+                async
+                src={"/static/" (static_files::goatcounter_count.name)} {}
 
             // Stimulus
             script type="module" src={"/static/" (static_files::stimulus_init.name)} {}
