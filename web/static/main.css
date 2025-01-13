@@ -670,7 +670,7 @@ html {
 }
 
 .schema-sidebar__draghandle::after {
-    content: '⠿';
+    content: '\283F';
 }
 
 .schema-sidebar__draghandle:active {
