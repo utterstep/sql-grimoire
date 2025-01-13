@@ -49,7 +49,7 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
             // Goatcounter
             script src={"/static/" (static_files::goatcounter_init.name)} {}
             script
-                data-goatcounter="https://grimoire.goatcounter.com/count"
+                data-goatcounter="https://goat.grimoire.utterstep.app/count"
                 async
                 src={"/static/" (static_files::goatcounter_count.name)} {}
 

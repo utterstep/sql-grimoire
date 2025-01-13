@@ -51,7 +51,6 @@ pub(super) fn setup<S: Clone + Send + Sync + 'static>(
             "*.utterstep.app",
             "*.frontendapi.corbado.io",
             // goatcounter
-            "grimoire.goatcounter.com",
             "esm.sh",
             "cdn.jsdelivr.net",
         ])
