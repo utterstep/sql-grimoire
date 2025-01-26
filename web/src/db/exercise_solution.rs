@@ -66,17 +66,27 @@ pub async fn update_user_solution(
     conn: &mut PgConnection,
     solution: UserSolution,
 ) -> Result<UserSolution> {
+    let (id, user_id, exercise_id, query, result, status) = solution.dissolve();
+
     Ok(Queryable::parse(
         sqlx::query_as!(
             UserSolutionInner,
             "UPDATE user_solution
-            SET query = $1, result = $2, status = $3
-            WHERE id = $4
+            SET
+                query = $1,
+                result = $2,
+                status = $3
+            WHERE
+                id = $4
+                AND user_id = $5
+                AND exercise_id = $6
             RETURNING id, user_id, exercise_id, query, result, status",
-            solution.query(),
-            solution.result(),
-            solution.status(),
-            solution.id().get(),
+            query,
+            result,
+            status,
+            id.get(),
+            user_id,
+            exercise_id.get(),
         )
         .fetch_one(conn)
         .await

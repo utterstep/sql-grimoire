@@ -1,4 +1,4 @@
-use derive_getters::Getters;
+use derive_getters::{Dissolve, Getters};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use uuid::Uuid;
@@ -9,7 +9,7 @@ use super::{exercise::ExerciseId, Queryable};
 
 define_id!(UserSolutionId, "us");
 
-#[derive(Debug, Clone, Serialize, Deserialize, Getters)]
+#[derive(Debug, Clone, Serialize, Deserialize, Getters, Dissolve)]
 pub struct UserSolution {
     id: UserSolutionId,
     user_id: String,

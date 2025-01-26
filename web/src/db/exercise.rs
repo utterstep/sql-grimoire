@@ -71,13 +71,22 @@ pub async fn update_exercise_schema(
     conn: &mut PgConnection,
     schema: ExerciseSchema,
 ) -> Result<ExerciseSchema> {
+    let (id, name, schema) = schema.dissolve();
+
     Ok(Queryable::parse(
         sqlx::query_as!(
             ExerciseSchemaInner,
-            "UPDATE exercise_schema SET name = $1, schema = $2 WHERE id = $3 RETURNING id, name, schema",
-            schema.name(),
-            schema.schema(),
-            schema.id().get(),
+            "UPDATE
+                exercise_schema
+            SET
+                name = $1,
+                schema = $2
+            WHERE
+                id = $3
+            RETURNING id, name, schema",
+            name,
+            schema,
+            id.get(),
         )
         .fetch_one(conn)
         .await
@@ -137,21 +146,27 @@ pub async fn get_exercise(conn: &mut PgConnection, id: ExerciseId) -> Result<Opt
 
 #[tracing::instrument(skip(conn))]
 pub async fn create_exercise(conn: &mut PgConnection, exercise: NewExercise) -> Result<Exercise> {
+    let (schema_id, name, question, expected_query, expected_result, published_at) =
+        exercise.dissolve();
+
+    let expected_result: serde_json::Value = serde_json::from_str(&expected_result)
+        .wrap_err("Failed to parse expected result as JSON")?;
+
     Ok(Queryable::parse(
         sqlx::query_as!(
             ExerciseInner,
             "INSERT INTO exercise
-                (schema_id, name, question, expected_query, expected_result)
+                (schema_id, name, question, expected_query, expected_result, published_at)
             VALUES
-                ($1, $2, $3, $4, $5)
+                ($1, $2, $3, $4, $5, $6)
             RETURNING
                 id, schema_id, name, question, expected_query, expected_result, published_at",
-            exercise.schema_id.get(),
-            exercise.name,
-            exercise.question,
-            exercise.expected_query,
-            serde_json::from_str::<serde_json::Value>(&exercise.expected_result)
-                .wrap_err("invalid JSON in expected result")?,
+            schema_id.get(),
+            name,
+            question,
+            expected_query,
+            expected_result,
+            published_at,
         )
         .fetch_one(conn)
         .await
@@ -161,6 +176,9 @@ pub async fn create_exercise(conn: &mut PgConnection, exercise: NewExercise) -> 
 
 #[tracing::instrument(skip(conn))]
 pub async fn update_exercise(conn: &mut PgConnection, exercise: Exercise) -> Result<Exercise> {
+    let (id, schema_id, name, question, expected_query, expected_result, published_at) =
+        exercise.dissolve();
+
     Ok(Queryable::parse(
         sqlx::query_as!(
             ExerciseInner,
@@ -168,19 +186,21 @@ pub async fn update_exercise(conn: &mut PgConnection, exercise: Exercise) -> Res
             SET
                 name = $1,
                 question = $2,
-                expected_query = $3,
-                expected_result = $4,
-                published_at = $5
+                schema_id = $3,
+                expected_query = $4,
+                expected_result = $5,
+                published_at = $6
             WHERE
-                id = $6
+                id = $7
             RETURNING
                 id, schema_id, name, question, expected_query, expected_result, published_at",
-            exercise.name(),
-            exercise.question(),
-            exercise.expected_query(),
-            exercise.expected_result(),
-            *exercise.published_at(),
-            exercise.id().get(),
+            name,
+            question,
+            schema_id.get(),
+            expected_query,
+            expected_result,
+            published_at,
+            id.get(),
         )
         .fetch_one(conn)
         .await

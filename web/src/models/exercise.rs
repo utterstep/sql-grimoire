@@ -1,4 +1,4 @@
-use derive_getters::Getters;
+use derive_getters::{Dissolve, Getters};
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 use uuid::Uuid;
@@ -9,7 +9,7 @@ use super::Queryable;
 
 define_id!(ExerciseSchemaId, "ex_schema");
 
-#[derive(Debug, Clone, Serialize, Deserialize, Getters)]
+#[derive(Debug, Clone, Serialize, Deserialize, Getters, Dissolve)]
 pub struct ExerciseSchema {
     id: ExerciseSchemaId,
     name: String,
@@ -68,7 +68,7 @@ impl Queryable for ExerciseSchemaListItem {
 
 define_id!(ExerciseId, "ex");
 
-#[derive(Debug, Clone, Serialize, Deserialize, Getters)]
+#[derive(Debug, Clone, Serialize, Deserialize, Getters, Dissolve)]
 pub struct Exercise {
     id: ExerciseId,
     schema_id: ExerciseSchemaId,
@@ -79,14 +79,14 @@ pub struct Exercise {
     published_at: Option<OffsetDateTime>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Dissolve)]
 pub struct NewExercise {
-    pub schema_id: ExerciseSchemaId,
-    pub name: String,
-    pub question: String,
-    pub expected_query: String,
-    pub expected_result: String,
-    pub published_at: Option<OffsetDateTime>,
+    schema_id: ExerciseSchemaId,
+    name: String,
+    question: String,
+    expected_query: String,
+    expected_result: String,
+    published_at: Option<OffsetDateTime>,
 }
 
 impl Exercise {
