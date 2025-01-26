@@ -46,10 +46,9 @@ fn exercise_form(
 
     let published_at = exercise
         // either the already existing published_at
-        .map(|ex| *ex.published_at())
-        .flatten()
+        .and_then(|ex| *ex.published_at())
         // or the current time
-        .unwrap_or_else(|| OffsetDateTime::now_utc());
+        .unwrap_or_else(OffsetDateTime::now_utc);
 
     html! {
         form
