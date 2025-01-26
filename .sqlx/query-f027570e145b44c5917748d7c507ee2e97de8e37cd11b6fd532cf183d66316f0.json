@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "UPDATE exercise\n            SET\n                name = $1,\n                question = $2,\n                expected_query = $3,\n                expected_result = $4,\n                published_at = $5\n            WHERE\n                id = $6\n            RETURNING\n                id, schema_id, name, question, expected_query, expected_result, published_at",
+  "query": "UPDATE exercise\n            SET\n                name = $1,\n                question = $2,\n                schema_id = $3,\n                expected_query = $4,\n                expected_result = $5,\n                published_at = $6\n            WHERE\n                id = $7\n            RETURNING\n                id, schema_id, name, question, expected_query, expected_result, published_at",
   "describe": {
     "columns": [
       {
@@ -43,6 +43,7 @@
       "Left": [
         "Text",
         "Text",
+        "Uuid",
         "Text",
         "Jsonb",
         "Timestamptz",
@@ -59,5 +60,5 @@
       true
     ]
   },
-  "hash": "1e9029638bf89bd35f1f0411724852ed1e6d71eee83efae8a30f8a84d778b412"
+  "hash": "f027570e145b44c5917748d7c507ee2e97de8e37cd11b6fd532cf183d66316f0"
 }

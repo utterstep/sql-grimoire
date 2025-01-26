@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "UPDATE user_solution\n            SET query = $1, result = $2, status = $3\n            WHERE id = $4\n            RETURNING id, user_id, exercise_id, query, result, status",
+  "query": "UPDATE user_solution\n            SET\n                query = $1,\n                result = $2,\n                status = $3\n            WHERE\n                id = $4\n                AND user_id = $5\n                AND exercise_id = $6\n            RETURNING id, user_id, exercise_id, query, result, status",
   "describe": {
     "columns": [
       {
@@ -39,6 +39,8 @@
         "Text",
         "Jsonb",
         "Text",
+        "Uuid",
+        "Text",
         "Uuid"
       ]
     },
@@ -51,5 +53,5 @@
       false
     ]
   },
-  "hash": "51b410ede39c68ccbc5ae6354b7f930470df0a443e6728542cc9d06e9962f3a1"
+  "hash": "7212edce1bef775d6fd8ac5d954b72b33ceae7c6cd8a171cbc420189414d6adf"
 }
