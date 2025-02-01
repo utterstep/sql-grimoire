@@ -135,7 +135,9 @@ pub fn footer() -> Markup {
                         i data-lucide="heart" class="footer__icon footer__icon--heart" {}
                         " by "
                         a href="https://github.com/utterstep" class="footer__link" target="_blank" { "Vlad" }
-                        "– "
+                    }
+                    p class="footer__text" {
+                        "© "
                         (current_year)
                     }
                 }
