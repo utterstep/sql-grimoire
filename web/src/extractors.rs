@@ -1,6 +1,5 @@
 use axum::{
-    async_trait,
-    extract::FromRequestParts,
+    extract::{FromRequestParts, OptionalFromRequestParts},
     http::{self, request::Parts},
     response::{IntoResponse, Response},
 };
@@ -53,14 +52,13 @@ const SESSION_COOKIE: &str = "cbo_session_token";
 
 struct SessionToken(String);
 
-#[async_trait]
-impl FromRequestParts<AppState> for SessionToken {
+impl OptionalFromRequestParts<AppState> for SessionToken {
     type Rejection = AuthExtractorError;
 
     async fn from_request_parts(
         parts: &mut Parts,
         state: &AppState,
-    ) -> Result<Self, Self::Rejection> {
+    ) -> Result<Option<Self>, Self::Rejection> {
         let jar = CookieJar::from_request_parts(parts, state)
             .await
             // Safe to unwrap – Result<_, Infalible> is returned
@@ -68,28 +66,52 @@ impl FromRequestParts<AppState> for SessionToken {
 
         trace!("Got signed cookie jar from request");
 
-        let session_token = jar
-            .get(SESSION_COOKIE)
-            .ok_or(AuthExtractorError::NoSessionCookie)?
-            .value()
-            .to_string();
+        let session_token = match jar.get(SESSION_COOKIE) {
+            Some(cookie) => cookie.value().to_string(),
+            None => return Ok(None),
+        };
 
         trace!("Got ID token from cookie jar");
 
-        Ok(SessionToken(session_token))
+        Ok(Some(SessionToken(session_token)))
     }
 }
 
-#[async_trait]
-impl FromRequestParts<AppState> for UserClaims {
+impl FromRequestParts<AppState> for SessionToken {
+    type Rejection = AuthExtractorError;
+
+    async fn from_request_parts(
+        parts: &mut Parts,
+        state: &AppState,
+    ) -> Result<Self, Self::Rejection> {
+        let session_token =
+            <SessionToken as OptionalFromRequestParts<AppState>>::from_request_parts(parts, state)
+                .await?;
+
+        match session_token {
+            Some(session_token) => Ok(session_token),
+            None => Err(AuthExtractorError::NoSessionCookie),
+        }
+    }
+}
+
+impl OptionalFromRequestParts<AppState> for UserClaims {
     type Rejection = AuthExtractorError;
 
     #[tracing::instrument(skip(parts, state))]
     async fn from_request_parts(
         parts: &mut Parts,
         state: &AppState,
-    ) -> Result<Self, Self::Rejection> {
-        let session_token = SessionToken::from_request_parts(parts, state).await?;
+    ) -> Result<Option<Self>, Self::Rejection> {
+        let session_token =
+            match <SessionToken as OptionalFromRequestParts<AppState>>::from_request_parts(
+                parts, state,
+            )
+            .await?
+            {
+                Some(session_token) => session_token,
+                None => return Ok(None),
+            };
 
         let claims: UserClaims = state
             .jwks_decoder()
@@ -113,19 +135,44 @@ impl FromRequestParts<AppState> for UserClaims {
             return Err(AuthExtractorError::InvalidIssuer);
         }
 
-        Ok(claims)
+        Ok(Some(claims))
     }
 }
 
-#[async_trait]
-impl FromRequestParts<AppState> for User {
+impl FromRequestParts<AppState> for UserClaims {
     type Rejection = AuthExtractorError;
 
     async fn from_request_parts(
         parts: &mut Parts,
         state: &AppState,
     ) -> Result<Self, Self::Rejection> {
-        let claims = UserClaims::from_request_parts(parts, state).await?;
+        let claims =
+            <UserClaims as OptionalFromRequestParts<AppState>>::from_request_parts(parts, state)
+                .await?;
+
+        match claims {
+            Some(claims) => Ok(claims),
+            None => Err(AuthExtractorError::NoSessionCookie),
+        }
+    }
+}
+
+impl OptionalFromRequestParts<AppState> for User {
+    type Rejection = AuthExtractorError;
+
+    async fn from_request_parts(
+        parts: &mut Parts,
+        state: &AppState,
+    ) -> Result<Option<Self>, Self::Rejection> {
+        let claims =
+            <UserClaims as OptionalFromRequestParts<AppState>>::from_request_parts(parts, state)
+                .await?;
+
+        let claims = match claims {
+            Some(claims) => claims,
+            None => return Ok(None),
+        };
+
         let mut conn = state.db().acquire().await?;
 
         let user = user::get_user(&mut conn, &claims)
@@ -133,8 +180,25 @@ impl FromRequestParts<AppState> for User {
             .wrap_err("Failed to query user from DB")?;
 
         match user {
-            Some(user) => Ok(user),
+            Some(user) => Ok(Some(user)),
             None => Err(AuthExtractorError::UserNotFound),
+        }
+    }
+}
+
+impl FromRequestParts<AppState> for User {
+    type Rejection = AuthExtractorError;
+
+    async fn from_request_parts(
+        parts: &mut Parts,
+        state: &AppState,
+    ) -> Result<Self, Self::Rejection> {
+        let user =
+            <User as OptionalFromRequestParts<AppState>>::from_request_parts(parts, state).await?;
+
+        match user {
+            Some(user) => Ok(user),
+            None => Err(AuthExtractorError::NoSessionCookie),
         }
     }
 }

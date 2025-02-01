@@ -1,14 +1,3 @@
-use crate::{
-    db::exercise,
-    error::Result,
-    models::{
-        exercise::{Exercise, ExerciseId, ExerciseSchemaId, ExerciseSchemaListItem, NewExercise},
-        user::User,
-    },
-    partials::{app_layout, page},
-    state::AppState,
-    static_files,
-};
 use axum::{
     debug_handler,
     extract::{Form, Path, Query, State},
@@ -20,6 +9,18 @@ use eyre::WrapErr;
 use maud::{html, Markup};
 use serde::Deserialize;
 use time::OffsetDateTime;
+
+use crate::{
+    db::exercise,
+    error::Result,
+    models::{
+        exercise::{Exercise, ExerciseId, ExerciseSchemaId, ExerciseSchemaListItem, NewExercise},
+        user::User,
+    },
+    partials::{app_layout, page},
+    state::AppState,
+    static_files,
+};
 
 #[derive(Debug, Deserialize)]
 pub struct NewExerciseQuery {

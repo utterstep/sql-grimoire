@@ -26,3 +26,8 @@ url = { version = "2.5.4", features = ["serde"] }
 
 [workspace.lints.clippy]
 unwrap_used = "deny"
+
+# patch axum-helmet using my fork git@github.com:utterstep/rust-helmet.git
+[patch.crates-io]
+axum-helmet = { git = "https://github.com/utterstep/rust-helmet.git", branch = "axum-0.8" }
+maud = { git = "https://github.com/lambda-fairy/maud.git", rev = "237d8ad5d7c81bfe6ee60c059299a5c742ed2db8" }

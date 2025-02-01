@@ -40,9 +40,14 @@ impl AppStateInner {
         let mut validation = Validation::new(Algorithm::RS256);
         validation.algorithms = vec![Algorithm::RS256, Algorithm::RS384, Algorithm::RS512];
 
-        let jwks_decoder = RemoteJwksDecoderBuilder::new(jwks_url.to_string())
-            .with_validation(validation)
-            .build();
+        let jwks_decoder = RemoteJwksDecoderBuilder::default()
+            .jwks_url(jwks_url.to_string())
+            .validation(validation)
+            .config(Default::default())
+            .keys_cache(Default::default())
+            .client(Default::default())
+            .build()
+            .unwrap();
 
         Ok(Self {
             db,

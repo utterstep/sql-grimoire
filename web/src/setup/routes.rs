@@ -13,7 +13,7 @@ pub(super) fn setup(app: Router<AppState>, state: AppState) -> Router<AppState> 
         .layer(middleware::from_fn(no_cache));
 
     let static_router = Router::new()
-        .route("/*path", routing::get(routes::serve_static::static_path))
+        .route("/{*path}", routing::get(routes::serve_static::static_path))
         .layer(CompressionLayer::new());
 
     let auth_router = Router::new()
@@ -31,16 +31,16 @@ pub(super) fn setup(app: Router<AppState>, state: AppState) -> Router<AppState> 
                 .post(routes::admin::exercise_schema_post),
         )
         .route(
-            "/exercise/schemas/:id/",
+            "/exercise/schemas/{id}/",
             routing::get(routes::admin::exercise_schema_edit)
                 .post(routes::admin::exercise_schema_post),
         )
         .route(
-            "/exercise/schemas/:id/json/",
+            "/exercise/schemas/{id}/json/",
             routing::get(routes::admin::exercise_schema_json),
         )
         .route(
-            "/exercise/:id/",
+            "/exercise/{id}/",
             routing::get(routes::admin::exercise_edit).post(routes::admin::exercise_post),
         )
         .route(
@@ -50,9 +50,9 @@ pub(super) fn setup(app: Router<AppState>, state: AppState) -> Router<AppState> 
         .layer(middleware::from_fn_with_state(state.clone(), require_admin));
 
     let exercise_router = Router::new()
-        .route("/:id/", routing::get(routes::exercise_run::run))
+        .route("/{id}/", routing::get(routes::exercise_run::run))
         .route(
-            "/:id/submit/",
+            "/{id}/submit/",
             routing::post(routes::exercise_run::submit_solution),
         )
         .layer(middleware::from_fn_with_state(state.clone(), require_auth));
@@ -61,7 +61,7 @@ pub(super) fn setup(app: Router<AppState>, state: AppState) -> Router<AppState> 
         .route("/", routing::get(routes::main::main_page))
         .layer(middleware::from_fn_with_state(state.clone(), require_auth));
 
-    app.nest("/", main_page_router)
+    app.merge(main_page_router)
         .nest("/static/", static_router)
         .nest("/exercise/", exercise_router)
         .nest("/auth/", auth_router)

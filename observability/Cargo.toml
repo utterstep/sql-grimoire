@@ -9,13 +9,14 @@ authors.workspace = true
 [dependencies]
 derive-getters.workspace = true
 eyre.workspace = true
-tonic = { version = "0.12", features = ["tls", "tls-webpki-roots", "prost"] }
 tracing.workspace = true
 tracing-opentelemetry = "0.28"
 tracing-tree = "0.4"
 tracing-subscriber = { version = "0.3", features = ["parking_lot", "env-filter"] }
 opentelemetry = "0.27"
-opentelemetry-otlp = { version = "0.27", features = ["tokio", "tls"] }
+opentelemetry-otlp = { version = "0.27", default-features = false, features = [
+    "tokio", "http-proto", "logs", "trace", "reqwest-client", "reqwest-rustls-webpki-roots"
+] }
 opentelemetry_sdk = { version = "0.27", features = ["rt-tokio"] }
 url.workspace = true
 secrecy.workspace = true
