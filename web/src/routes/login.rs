@@ -8,21 +8,27 @@ use maud::{html, Markup};
 use tracing::debug;
 
 use crate::{
-    db::user, error::Result, models::user::UserClaims, partials::page, state::AppState,
+    db::user,
+    error::Result,
+    models::user::UserClaims,
+    partials::{app_layout, page, AuthState},
+    state::AppState,
     static_files::corbado_login,
 };
 
 #[debug_handler]
 #[tracing::instrument]
 pub async fn login() -> Markup {
-    page(
-        "Login",
+    let inner = app_layout(
         html! {
             script src={"/static/" (corbado_login.name)} {}
-            h1 { "Login" }
             div #corbado-auth {}
         },
-    )
+        "Login",
+        AuthState::Unauthenticated,
+    );
+
+    page("Login", inner)
 }
 
 #[debug_handler]

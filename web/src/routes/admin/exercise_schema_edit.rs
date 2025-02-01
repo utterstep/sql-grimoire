@@ -135,7 +135,7 @@ pub async fn exercise_schema_edit(
             (form)
         },
         "SQL Grimoire - Exercise Schema Edit",
-        user.is_admin(),
+        user.auth_state(),
     );
 
     Ok(page("SQL Grimoire - Exercise Schema Edit", inner).into_response())
@@ -159,7 +159,7 @@ pub async fn exercise_schema_new(
             (form)
         },
         "SQL Grimoire - Exercise Schema New",
-        user.is_admin(),
+        user.auth_state(),
     );
 
     Ok(page("SQL Grimoire - Exercise Schema New", inner).into_response())

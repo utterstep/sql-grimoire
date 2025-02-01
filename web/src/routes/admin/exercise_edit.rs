@@ -236,7 +236,7 @@ pub async fn exercise_edit(
             (form)
         },
         "SQL Grimoire - Exercise Edit",
-        user.is_admin(),
+        user.auth_state(),
     );
 
     Ok(page("SQL Grimoire - Exercise Edit", inner).into_response())
@@ -272,7 +272,7 @@ pub async fn exercise_new(
             (form)
         },
         "SQL Grimoire - New Exercise",
-        user.is_admin(),
+        user.auth_state(),
     );
 
     Ok(page("SQL Grimoire - New Exercise", inner).into_response())

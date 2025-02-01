@@ -71,7 +71,7 @@ pub async fn exercise_schema_list(
 
     Ok(page(
         "Exercise Schemas",
-        app_layout(inner, "SQL Grimoire – Exercise Schemas", user.is_admin()),
+        app_layout(inner, "SQL Grimoire – Exercise Schemas", user.auth_state()),
     )
     .into_response())
 }

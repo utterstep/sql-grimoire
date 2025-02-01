@@ -1,6 +1,9 @@
 use maud::{html, Markup, DOCTYPE};
 
-use crate::static_files;
+use crate::{
+    models::user::{User, UserRole},
+    static_files,
+};
 
 /// Page template, ~100% of the time you want to use this.
 pub fn page(page_title: impl AsRef<str>, content: Markup) -> Markup {
@@ -67,18 +70,40 @@ pub fn head_custom_content(page_title: &str, head_content: Markup) -> Markup {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+pub enum AuthState {
+    User,
+    Admin,
+    Unauthenticated,
+}
+
+impl User {
+    pub fn auth_state(&self) -> AuthState {
+        match *self.role() {
+            UserRole::Admin => AuthState::Admin,
+            UserRole::User => AuthState::User,
+            UserRole::Unknown(_) => AuthState::Unauthenticated,
+        }
+    }
+}
+
 /// App layout template.
-pub fn app_layout(content: Markup, title: &str, is_admin: bool) -> Markup {
+pub fn app_layout(content: Markup, title: &str, auth_state: AuthState) -> Markup {
+    let title_href = match auth_state {
+        AuthState::Unauthenticated => "#",
+        AuthState::User | AuthState::Admin => "/",
+    };
+
     html! {
         div class="app" {
             nav class="nav" {
                 div class="nav__container" {
-                    a href="/" class="nav__brand" {
+                    a href=(title_href) class="nav__brand" {
                         i data-lucide="book-open" class="nav__icon" {}
                         span class="nav__title" { (title) }
                     }
                     div class="nav__menu" {
-                        @if is_admin {
+                        @if let AuthState::Admin = auth_state {
                             a href="/admin/exercise/schemas/" class="nav__link" {
                                 i data-lucide="database" class="nav__link-icon" {}
                                 span { "Schemas" }

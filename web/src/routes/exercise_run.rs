@@ -59,9 +59,13 @@ pub async fn run(
 
     let title = format!("SQL Grimoire - {}", exercise.name());
 
-    let question_parsed = pulldown_cmark::Parser::new(exercise.question());
-    let mut question_html = String::new();
-    pulldown_cmark::html::push_html(&mut question_html, question_parsed);
+    let question_text = {
+        let question_parsed = pulldown_cmark::Parser::new(exercise.question());
+        let mut question_html = String::new();
+        pulldown_cmark::html::push_html(&mut question_html, question_parsed);
+
+        PreEscaped(question_html)
+    };
 
     let inner = app_layout(
         html! {
@@ -86,7 +90,7 @@ pub async fn run(
                     div class="panel panel--exercise" {
                         h2 class="panel__title" { (exercise.name()) }
                         div class="panel__content" {
-                            div class="panel__text" { (PreEscaped(question_html)) }
+                            div class="panel__text" { (question_text) }
                             div
                                 class="table-info"
                             {
@@ -243,7 +247,7 @@ pub async fn run(
             script defer type="module" src={"/static/" (static_files::solution_submit_controller.name)} {}
         },
         exercise.name(),
-        user.is_admin(),
+        user.auth_state(),
     );
 
     Ok(page(&title, inner).into_response())

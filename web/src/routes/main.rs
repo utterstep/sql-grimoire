@@ -92,7 +92,7 @@ pub async fn main_page(
 
     Ok(page(
         "SQL Grimoire",
-        app_layout(inner, "SQL Grimoire", user.is_admin()),
+        app_layout(inner, "SQL Grimoire", user.auth_state()),
     )
     .into_response())
 }
