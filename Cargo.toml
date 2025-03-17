@@ -3,7 +3,7 @@ version = "0.1.0"
 authors = [
     "Vlad Stepanov <utterstep@hey.com>",
 ]
-edition = "2021"
+edition = "2024"
 
 [workspace]
 resolver = "3"

@@ -1,9 +1,8 @@
 use axum::{
-    debug_handler,
+    Json, debug_handler,
     extract::{Form, Path, State},
     http,
     response::{IntoResponse, Redirect},
-    Json,
 };
 use axum_extra::extract::Cached;
 use eyre::WrapErr;
@@ -119,7 +118,7 @@ pub async fn exercise_schema_edit(
     let exercise_schema = match exercise_schema {
         Some(exercise_schema) => exercise_schema,
         None => {
-            return Ok((http::StatusCode::NOT_FOUND, "Exercise schema not found").into_response())
+            return Ok((http::StatusCode::NOT_FOUND, "Exercise schema not found").into_response());
         }
     };
 
@@ -194,7 +193,7 @@ pub async fn exercise_schema_post(
                 None => {
                     return Ok(
                         (http::StatusCode::NOT_FOUND, "Exercise schema not found").into_response()
-                    )
+                    );
                 }
             };
 

@@ -6,7 +6,7 @@ use axum::{
 };
 use axum_extra::extract::Cached;
 use eyre::WrapErr;
-use maud::{html, Markup};
+use maud::{Markup, html};
 use serde::Deserialize;
 use time::OffsetDateTime;
 

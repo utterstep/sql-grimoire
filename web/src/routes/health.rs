@@ -1,4 +1,4 @@
-use axum::{debug_handler, Json};
+use axum::{Json, debug_handler};
 
 #[derive(Debug, serde::Serialize)]
 pub struct HealthResponse {

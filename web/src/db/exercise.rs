@@ -4,11 +4,11 @@ use sqlx::postgres::PgConnection;
 use sql_grimoire_id::Id;
 
 use crate::models::{
+    Queryable,
     exercise::{
         Exercise, ExerciseId, ExerciseListItem, ExerciseSchema, ExerciseSchemaId,
         ExerciseSchemaListItem, NewExercise,
     },
-    Queryable,
 };
 
 type ExerciseListItemInner = <ExerciseListItem as Queryable>::Inner;

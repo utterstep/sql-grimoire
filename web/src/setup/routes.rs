@@ -1,4 +1,4 @@
-use axum::{middleware, routing, Router};
+use axum::{Router, middleware, routing};
 use tower_http::compression::CompressionLayer;
 
 use crate::{

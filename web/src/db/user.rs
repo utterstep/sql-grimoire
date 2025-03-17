@@ -2,8 +2,8 @@ use eyre::{Result, WrapErr};
 use sqlx::postgres::PgConnection;
 
 use crate::models::{
-    user::{User, UserClaims, UserRole},
     Queryable,
+    user::{User, UserClaims, UserRole},
 };
 
 type UserInner = <User as Queryable>::Inner;

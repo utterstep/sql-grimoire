@@ -5,7 +5,7 @@ use sqlx::postgres::PgConnection;
 use sql_grimoire_id::Id;
 
 use crate::models::{
-    exercise::ExerciseId, exercise_solution::UserSolution, user::UserClaims, Queryable,
+    Queryable, exercise::ExerciseId, exercise_solution::UserSolution, user::UserClaims,
 };
 
 type UserSolutionInner = <UserSolution as Queryable>::Inner;

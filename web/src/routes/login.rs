@@ -4,14 +4,14 @@ use axum::{
     response::{IntoResponse, Redirect},
 };
 use eyre::WrapErr;
-use maud::{html, Markup};
+use maud::{Markup, html};
 use tracing::debug;
 
 use crate::{
     db::user,
     error::Result,
     models::user::UserClaims,
-    partials::{app_layout, page, AuthState},
+    partials::{AuthState, app_layout, page},
     state::AppState,
     static_files::corbado_login,
 };

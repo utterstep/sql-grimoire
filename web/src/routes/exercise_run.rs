@@ -6,7 +6,7 @@ use axum::{
 };
 use axum_extra::extract::Cached;
 use eyre::{OptionExt, WrapErr};
-use maud::{html, PreEscaped};
+use maud::{PreEscaped, html};
 use serde::Deserialize;
 
 use crate::{

@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use sql_grimoire_id::define_id;
 
-use super::{exercise::ExerciseId, Queryable};
+use super::{Queryable, exercise::ExerciseId};
 
 define_id!(UserSolutionId, "us");
 

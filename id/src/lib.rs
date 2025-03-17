@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn test_id() {
-        use serde_test::{assert_tokens, Token};
+        use serde_test::{Token, assert_tokens};
 
         let id = uuid::Uuid::nil();
         let test_id = TestId::from(id);

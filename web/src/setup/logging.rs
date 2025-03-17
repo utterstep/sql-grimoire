@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use axum::{http::header, Router};
+use axum::{Router, http::header};
 use tower::ServiceBuilder;
 use tower_http::{
     request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer},
